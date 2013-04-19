@@ -3,6 +3,6 @@
 
 import importlib
 
-enabled_apps = []
+enabled_apps = ['git']
 PROJECT_NAME = 'giteverywhere'
 project_package = importlib.import_module("giteverywhere")
