@@ -19,3 +19,16 @@ def get_commit_log(repository_path):
         commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=m[2].strip(), message=m[3].strip()))
 
     return commits
+    
+def get_branch_view(repository_path):
+  
+    branches = []
+    s = subprocess.check_output("cd %s; git branch" % repository_path, shell=True)
+    r = re.compile("\n")
+    matches = r.findall(s)
+    for m in matches:
+        #branches.append(dict(branch_name=m[0].strip()))
+        branches.append(branch_name=m[0].strip())
+        
+    return branches
+    
