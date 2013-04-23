@@ -23,12 +23,12 @@ def get_commit_log(repository_path):
 def get_branch_view(repository_path):
   
     branches = []
-    s = subprocess.check_output("cd %s; git branch" % repository_path, shell=True)
-    r = re.compile("\n")
+    s = subprocess.check_output("cd %s; git branch --list" % repository_path, shell=True)
+    r = re.compile("(\w+)\n")
     matches = r.findall(s)
     for m in matches:
-        #branches.append(dict(branch_name=m[0].strip()))
-        branches.append(branch_name=m[0].strip())
-        
+        branches.append(dict(branch_name=m[0].strip()))
+
+
     return branches
     
