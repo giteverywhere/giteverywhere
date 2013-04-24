@@ -23,12 +23,30 @@ def get_commit_log(repository_path):
 def get_branch_view(repository_path):
   
     branches = []
-    s = subprocess.check_output("cd %s; git branch --list" % repository_path, shell=True)
-    r = re.compile("(\w+)\n")
+    s = subprocess.check_output("cd %s; git branch " % repository_path, shell=True)
+    r = re.compile("((.*))\n")
+      
+    #r = re.compile("(\w.(.*))\n")    # show name of all branches without mentioning current branch with * 
+    #r = re.compile("("".(.*))\n")     # show name of all branches mentioning current branch 
+    
     matches = r.findall(s)
     for m in matches:
         branches.append(dict(branch_name=m[0].strip()))
 
 
     return branches
+ 
+def get_current_branch(repository_path):
+  
+    branches = []
+    s = subprocess.check_output("cd %s; git branch " % repository_path, shell=True)
+    r = re.compile("(\*.(.*))\n")
+    matches = r.findall(s)
+    for m in matches:
+        branches.append(dict(branch_name=m[0].strip()))
+
+
+    return branches
+
+ 
     
