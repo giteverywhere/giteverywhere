@@ -4,12 +4,7 @@ Module containing functions/classes to work with repositories
 import re
 import subprocess
 
-
 def get_commit_log(repository_path):
-    """
-    Given path to a repository on local system, returns a list of commit messages along with
-    commit hash
-    """
 
     commits = []
     s = subprocess.check_output("cd %s; git log" % repository_path, shell=True)
@@ -18,14 +13,15 @@ def get_commit_log(repository_path):
     for m in matches:
         commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=m[2].strip(), message=m[3].strip()))
 
-    return commits
-    
+    return commits 
+  
 def get_branch_view(repository_path):
   
     branches = []
     s = subprocess.check_output("cd %s; git branch " % repository_path, shell=True)
     r = re.compile("((.*))\n")
-      
+     
+    #r = re.compile("((.*))") 
     #r = re.compile("(\w.(.*))\n")    # show name of all branches without mentioning current branch with * 
     #r = re.compile("("".(.*))\n")     # show name of all branches mentioning current branch 
     
