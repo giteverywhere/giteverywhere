@@ -23,12 +23,14 @@ def log_view(request):
     #      that you want to view the log for
     # repository_path = '/MyWork/Projects/eims-dev'
     repository_path = '/home/bint-e-shafiq/gt'
-    repository_name = "EIMS"
+    repository_name = "giteverywhere"
+    b_name = request.matchdict['b_name']
    
-    commit_log = get_commit_log(repository_path)
+    commit_log = get_commit_log(repository_path,b_name)
     return {'APP_BASE': APP_BASE,
             'repository_path': repository_path,
             'repository_name': repository_name,
+            'b_name':b_name,
             'commit_log': commit_log}
             
             
