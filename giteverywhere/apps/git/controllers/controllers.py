@@ -22,7 +22,7 @@ def log_view(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
     # repository_path = '/MyWork/Projects/eims-dev'
-    repository_path = '/home/bint-e-shafiq/gt'
+    repository_path = '/home/bint-e-shafiq/giteverywhere'
     repository_name = "giteverywhere"
     b_name = request.matchdict['b_name']
    
