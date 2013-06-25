@@ -58,6 +58,7 @@ class UserPermission(Base):
         self.user_id = user_id
         self.permission = permission
         
+
 class Repository(Base):
     __tablename__ = 'repositories'
 
@@ -72,5 +73,4 @@ class Repository(Base):
       self.repo_name = repo_name
       self.repo_path = repo_path
       self.description = description
-      
-        
+
