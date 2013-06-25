@@ -9,6 +9,7 @@ giteverywhere - Authentication Manager
   <a href="${request.route_url('pyckauth_users')}">Users</a> |
   <a href="${request.route_url('pyckauth_permissions')}">Permissions</a> |
   <a href="${request.route_url('pyckauth_routes')}">Routes</a>
+  <a href="${request.route_url('pyckauth_repo')}">Repo</a>
 </p>
 </%def>
 
