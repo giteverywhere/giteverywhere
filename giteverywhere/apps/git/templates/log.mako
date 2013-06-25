@@ -5,8 +5,8 @@ The git app
 </%def>
 
 <div>
-  <h1>Viewing commit log for repository: ${repository_name} </h1>
-  print ${b_name}
+  <h1>Viewing commit log for repository: ${repository_name}</h1>
+  
   <table>
     <tr class="tr_heading">
       <th>Commit Hash</th>

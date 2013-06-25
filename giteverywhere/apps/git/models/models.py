@@ -7,10 +7,10 @@ from sqlalchemy import (
 from . import DBSession, Base
 
 #class MyModel(Base):
-#    __tablename__ = 'my_model'
-#    id = Column(Integer, primary_key=True)
-#    title = Column(Unicode(200), unique=True)
-#
+#    __tablename__ = 'repo_names'
+#   id = Column(Integer, primary_key=True)
+#    name = Column(Unicode(200), unique=True)
+
 #    def __init__(self, title, content):
 #        self.title = title
 

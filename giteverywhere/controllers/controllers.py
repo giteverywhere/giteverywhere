@@ -27,3 +27,6 @@ def contact_form(request):
             return HTTPFound(location=request.route_url('home'))
 
     return {'contact_form': f}
+    
+    
+

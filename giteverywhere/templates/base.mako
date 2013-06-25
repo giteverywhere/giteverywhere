@@ -68,7 +68,9 @@
 <%def name="main_menu()">
 <p>
   <a href="${request.route_url('home')}">Home</a> |
-  <a href="${request.route_url('contact')}">Contact Us</a>
+  <a href="${request.route_url('contact')}">Contact Us</a> 
+
+
 </p>
 </%def>
 <%def name="footer()">

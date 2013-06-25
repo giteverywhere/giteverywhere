@@ -5,10 +5,15 @@ from pyramid.session import UnencryptedCookieSessionFactoryConfig
 
 from sqlalchemy import engine_from_config
 
+
 from models import DBSession
 
 import importlib
 from apps import enabled_apps
+
+from pyck.ext import add_admin_handler, AdminController
+from pyck.lib import get_models
+import giteverywhere
 
 
 def main(global_config, **settings):
@@ -37,7 +42,10 @@ def main(global_config, **settings):
     config.add_route('pyckauth_users', '/auth/users')
     config.add_route('pyckauth_permissions', '/auth/permissions')
     config.add_route('pyckauth_routes', '/auth/routes')
+  
 
+
+    add_admin_handler(config, DBSession, get_models(giteverywhere), 'admin.', '/admin', AdminController)  
     configure_app_routes(config)
 
     config.scan()

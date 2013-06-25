@@ -8,7 +8,6 @@ from ..models import (
 from ..lib.repository import get_commit_log
 from ..lib.repository import get_branch_view
 from ..lib.repository import get_current_branch
-
 from .. import APP_NAME, PROJECT_NAME, APP_BASE
 
 
@@ -21,19 +20,15 @@ def my_view(request):
 def log_view(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    # repository_path = '/MyWork/Projects/eims-dev'
     repository_path = '/home/bint-e-shafiq/giteverywhere'
     repository_name = "giteverywhere"
-    b_name = request.matchdict['b_name']
-   
+    b_name = 'tehni'
     commit_log = get_commit_log(repository_path,b_name)
     return {'APP_BASE': APP_BASE,
             'repository_path': repository_path,
             'repository_name': repository_name,
-            'b_name':b_name,
+            'b_name' : b_name,
             'commit_log': commit_log}
-            
-            
             
             
 @view_config(route_name=APP_NAME+'.branch', renderer='%s:templates/branch.mako' % APP_BASE)
@@ -65,3 +60,12 @@ def current_branch(request):
             'repository_path': repository_path,
             'repository_name': repository_name,
             'branch_view': branch_view}
+            
+            
+
+  
+            
+
+   
+
+

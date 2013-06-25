@@ -20,6 +20,7 @@ from ..models import (
     Permission,
     RoutePermission,
     UserPermission,
+    Repository,
     Base,
     )
 
@@ -62,6 +63,8 @@ def main(argv=sys.argv):
         if 0 == DBSession.query(RoutePermission).count():
             DBSession.add(RoutePermission('pyckauth_manager', 'ALL', 'admin'))
             DBSession.flush()
+            
+     
 
     #populate application models
     for app_name in enabled_apps:

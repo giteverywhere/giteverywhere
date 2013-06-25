@@ -8,6 +8,8 @@ from ..forms import LoginForm, UserForm, PermissionForm, RoutePermissionForm
 from sqlalchemy import func
 
 
+
+
 @view_config(route_name='pyckauth_manager', renderer='pyckauth_manager.mako')
 def auth_manager(request):
     user_count = DBSession.query(func.count(User.user_id)).scalar()

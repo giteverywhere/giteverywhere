@@ -43,6 +43,7 @@ class RoutePermissionForm(Form):
                                                                      ('PUT', 'PUT'), ('DELETE', 'DELETE'),
                                                                      ('HEAD', 'HEAD'), ('OPTIONS', 'OPTIONS')])
     permissions = MultiCheckboxField("Permissions")
+    
 
 
 __all__ = ['UserForm', 'PermissionForm', 'RoutePermissionForm', 'LoginForm']
