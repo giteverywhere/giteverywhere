@@ -61,11 +61,24 @@ def current_branch(request):
             'repository_name': repository_name,
             'branch_view': branch_view}
             
-            
-
+@view_config(route_name=APP_NAME+'.manage', renderer='%s:templates/manage.mako' % APP_BASE)
+def branch_log(request):
   
+  
+    repo = request.matchdict['repo']
+    repository_path = '/home/bint-e-shafiq/giteverywhere'
+    b_name = 'tehni'   
+            
+    branch_view = get_branch_view(repository_path)
+    commit_log = get_commit_log(repository_path,b_name)
+   
+    return {'APP_BASE': APP_BASE,
+            'repository_path': repository_path,
+            'repo': repo,
+            'branch_view': branch_view,
+            'b_name' : b_name,
+            'commit_log': commit_log}
             
 
-   
 
 

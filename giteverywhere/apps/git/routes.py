@@ -6,6 +6,7 @@ def application_routes(config):
     config.add_route(APP_NAME + '.log', '/log/{b_name}')
     config.add_route(APP_NAME + '.branch', '/branch')
     config.add_route(APP_NAME + '.cbranch', '/cbranch')
+    config.add_route(APP_NAME + '.manage', '/manage/{repo}')
  
     
     config.add_static_view('static', 'static', cache_max_age=3600)
