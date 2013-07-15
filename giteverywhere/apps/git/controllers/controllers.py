@@ -31,10 +31,12 @@ def log(request):
     #repo_path = '/home/bint-e-shafiq/test_repo'
     #repository_name = "test_repo"
  
-    comit_log = get_comit_log(repo_path)
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    
+    comit_log = get_comit_log(r.repo_path)
     return {'APP_BASE': APP_BASE,   
-            'repo_path': repo_path,
-            'repository_name': repository_name,
+            'repo_path': r.repo_path,
+            'repository_name': r.repo_name,
             'comit_log': comit_log}
   
     

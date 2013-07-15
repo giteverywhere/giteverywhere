@@ -4,7 +4,7 @@ from . import APP_NAME, PROJECT_NAME, APP_BASE
 def application_routes(config):
     config.add_route(APP_NAME + '.home', '/')
     config.add_route(APP_NAME + '.log', '/log/{b_name}')
-    config.add_route(APP_NAME + '.clog', '/clog')
+    config.add_route(APP_NAME + '.clog', '/clog/{repo}')
     
     config.add_route(APP_NAME + '.branch', '/branch')
     config.add_route(APP_NAME + '.cbranch', '/cbranch')
