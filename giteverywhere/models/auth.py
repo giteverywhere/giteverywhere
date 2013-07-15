@@ -59,7 +59,7 @@ class UserPermission(Base):
         self.permission = permission
         
 
-class Repository(Base):
+'''class Repository(Base):
     __tablename__ = 'repositories'
 
     repo_id = Column(Unicode(100), primary_key=True)
@@ -73,4 +73,10 @@ class Repository(Base):
       self.repo_name = repo_name
       self.repo_path = repo_path
       self.description = description
+      
+'''
+
+
+     
+
 

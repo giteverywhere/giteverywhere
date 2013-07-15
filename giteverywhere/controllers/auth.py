@@ -210,3 +210,7 @@ def logout(request):
     del request.session['auth_user_permissions']
 
     return HTTPFound(location=request.route_url('home'))
+
+
+
+ 

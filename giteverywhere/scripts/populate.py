@@ -20,7 +20,6 @@ from ..models import (
     Permission,
     RoutePermission,
     UserPermission,
-    Repository,
     Base,
     )
 

@@ -42,7 +42,10 @@ def main(global_config, **settings):
     config.add_route('pyckauth_users', '/auth/users')
     config.add_route('pyckauth_permissions', '/auth/permissions')
     config.add_route('pyckauth_routes', '/auth/routes')
-  
+   #config.add_route('add_repo_names', '/add_repo_names')
+   #config.add_route('display', '/display')
+    config.add_route('view_repo_names', '/view_repo_names')
+   #config.add_route('delete_product', '/delete/{repo_id}')
 
 
     add_admin_handler(config, DBSession, get_models(giteverywhere), 'admin.', '/admin', AdminController)  

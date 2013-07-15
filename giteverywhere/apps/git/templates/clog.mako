@@ -5,7 +5,7 @@ The git app
 </%def>
 
 <div>
-  <h1>Viewing commit log for repository: ${b_name}</h1>
+ 
   
   <table>
     <tr class="tr_heading">
@@ -14,7 +14,7 @@ The git app
       <th>Date & Time</th>
       <th>Commit Message</th>
     </tr>
-    %for commit in commit_log:
+    %for commit in comit_log:
     <tr class="${loop.cycle('oddrow', 'evenrow')}">
       <td>${commit['commit_hash']}</td>
       <td>${commit['author']}</td>
