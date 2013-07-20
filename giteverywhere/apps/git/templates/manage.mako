@@ -6,16 +6,16 @@ The git app
 
 <div>
   <h1>Branches</h1> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
+ 
   
-  <a href ="${request.route_url('git.clog')}">Commits</a>&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href ="${request.route_url('git.clog', repo=repo)}">Commits</a>&nbsp;&nbsp;&nbsp;&nbsp;
 
-     
-    <a href="${request.route_url('git.branch')}">Branches</a> &nbsp;&nbsp;&nbsp;&nbsp;
+ 
+    <a href="${request.route_url('git.branch', repo=repo)}">Branches</a> &nbsp;&nbsp;&nbsp;&nbsp;
     
-     <a href="${request.route_url('git.tag')}">Tags</a> &nbsp;&nbsp;&nbsp;&nbsp;
+     <a href="${request.route_url('git.tag', repo=repo)}">Tags</a> &nbsp;&nbsp;&nbsp;&nbsp;
      
-     <a href="${request.route_url('git.diff')}">Difference</a>
+     <a href="${request.route_url('git.diff', repo=repo)}">Difference</a>
      
        
 

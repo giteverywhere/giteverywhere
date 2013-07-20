@@ -63,14 +63,17 @@ def log_view(request):
 def branch_log(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/test_repo'
-    repository_name = "test_repo"
-   
+    #repo_path = '/home/bint-e-shafiq/test_repo'
+    #repository_name = "test_repo"
+    
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    
+
     #branch_view = get_branch_view(repository_path)
-    branch_view = get_branch_view(repo_path)
+    branch_view = get_branch_view(r.repo_path)
     return {'APP_BASE': APP_BASE,
-            'repo_path': repo_path,
-            'repository_name': repository_name,
+            'repo_path': r.repo_path,
+            'repository_name': r.repo_name,
             'branch_view': branch_view}
 
             
@@ -93,14 +96,14 @@ def current_branch(request):
 def tag_title(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/sample_repo'
-    repository_name = "sample_repo"
-   
+    #repo_path = '/home/bint-e-shafiq/sample_repo'
+    #repository_name = "sample_repo"
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
     #branch_view = get_branch_view(repository_path)
-    tag_list = get_tag_list(repo_path)
+    tag_list = get_tag_list(r.repo_path)
     return {'APP_BASE': APP_BASE,
-            'repo_path': repo_path,
-            'repository_name': repository_name,
+            'repo_path': r.repo_path,
+            'repository_name': r.repo_name,
             'tag_list': tag_list}
             
 
@@ -129,14 +132,15 @@ def commit_diff(request):
    # path = R.repo_path
    # R = DBSession.query(RepoName.repo_name, RepoName.repo_path).all()
     #path = RepoName.repo_path
-    repo_path = '/home/bint-e-shafiq/sample_repo'
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    #repo_path = '/home/bint-e-shafiq/sample_repo'
     #repo_path = DBSession.query(Repository).filter_by(repo_path='_repo')
-    repository_name = "sample_repo"
+    #repository_name = "sample_repo"
    
-    view_diff = get_commit_difference(repo_path)
+    view_diff = get_commit_difference(r.repo_path)
     return {'APP_BASE': APP_BASE,
-            'repo_path': repo_path,
-            'repository_name': repository_name,
+            'repo_path': r.repo_path,
+            'repository_name': r.repo_name,
             'view_diff': view_diff
             }
             
@@ -144,26 +148,45 @@ def commit_diff(request):
 def file_list(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/test_repo'
+    repo_path = '/home/bint-e-shafiq/giteverywhere'
     repository_name = "test_repo"
    
     #branch_view = get_branch_view(repository_path)
-    file_names = get_file_name(repo_path)
-   
-    #f_name = file_names
+    f_name = get_file_name(repo_path)
+    #file_name = f_name
+    
+    #d = f_name[0]['file_name']
+    a = range(len(f_name))
+    
+    for s in range(len(f_name)): 
+    
+      d = f_name[s]['file_name']
+          
+    for i in f_name:
+      l = i['file_name']
+      
     return {'APP_BASE': APP_BASE,
             'repo_path': repo_path,
             'repository_name': repository_name,
-            'file_names': file_names}
+            'f_name': f_name,
+            'd' : d,
+            'l': l,
+            'a': a,
+            's': s
+            #'file_name':file_name
+            }
             
             
 @view_config(route_name=APP_NAME+'.contents', renderer='%s:templates/file_contents.mako' % APP_BASE)
 def file_content(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/test_repo'
+    repo_path = '/home/bint-e-shafiq/giteverywhere'
     repository_name = "test_repo"
+    
+    
     #repo = request.matchdict['repo_name']
+
     f_name = request.matchdict['f_name']
    
     #branch_view = get_branch_view(repository_path)

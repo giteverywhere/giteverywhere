@@ -98,7 +98,8 @@ def get_tag_detail(repo_path):
     tags = []
    #s = subprocess.check_output("cd %s; git branch " % repository_path, shell=True)
     #r = re.compile("(\w.(.*))\n")
-    s = subprocess.check_output("cd %s; git show " % repo_path, shell=True)
+    s = subprocess.check_output("cd %s; git log -p -2" % repo_path, shell=True)
+    #s = subprocess.check_output("cd %s; git show " % repo_path, shell=True)
     r = re.compile("((.*))\n")
     matches = r.findall(s)
     for m in matches:
@@ -113,7 +114,7 @@ def get_commit_difference(repo_path):
    #s = subprocess.check_output("cd %s; git branch " % repository_path, shell=True)
     #r = re.compile("(\w.(.*))\n")
     s = subprocess.check_output("cd %s; git log --stat " % repo_path, shell=True)
-    #s = subprocess.check_output("cd %s; git log -p" % repo_path, shell=True)
+    #s = subprocess.check_output("cd %s; git log -p -2" % repo_path, shell=True)
     #r = re.compile("((.*))\n")
     #r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n\n(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I+re.I+re.I)
     r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n\n(.*?)\n(.*?)\n", re.M+re.S+re.U+re.I)

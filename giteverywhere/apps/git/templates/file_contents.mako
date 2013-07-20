@@ -8,7 +8,7 @@ The git app
 <div>
   <h1>Viewing all files of repository: ${repository_name}</h1>
   
-  
+  ${f_name}
   
   <table>
     <tr class="tr_heading">
