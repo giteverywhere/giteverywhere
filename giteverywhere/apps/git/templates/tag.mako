@@ -1,3 +1,8 @@
+
+
+<!DOCTYPE html>
+<html>
+<body>
 <%inherit file="/base.mako"/>
 
 <%def name="title()">
@@ -12,11 +17,15 @@ The git app
       <th>Tags</th>
     </tr>
    %for tag in tag_list:
+    
    <tr class="${loop.cycle('oddrow', 'evenrow')}">
-   <td>${tag['tag_title']}</td>
+    
+   <td><h2 style="${loop.cycle('background-color:red;', 'background-color:green;')}">${tag['tag_title']}</h2></td>
    
       </tr>
       %endfor  
   </table>
   
 </div>
+</body>
+</html>

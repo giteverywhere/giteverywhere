@@ -1,5 +1,6 @@
 from pyramid.view import view_config
 import os
+import re
 from ..models import (
     DBSession,
     #include your models here
@@ -48,7 +49,7 @@ def log_view(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
    
-    repo_path = '/home/bint-e-shafiq/test_repo'
+    repo_path = '/home/muslim/test_repo'
     repository_name = "test_repo"
     b_name = request.matchdict['b_name']
     commit_log = get_commit_log(repo_path,b_name)
@@ -63,7 +64,7 @@ def log_view(request):
 def branch_log(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    #repo_path = '/home/bint-e-shafiq/test_repo'
+    #repo_path = '/home/muslim/test_repo'
     #repository_name = "test_repo"
     
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
@@ -83,7 +84,7 @@ def current_branch(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
     # repository_path = '/MyWork/Projects/eims-dev'
-    repository_path = '/home/bint-e-shafiq/test_repo'
+    repository_path = '/home/muslim/test_repo'
     repository_name = "giteverywhere"
    
     branch_view = get_current_branch(repository_path)
@@ -96,7 +97,7 @@ def current_branch(request):
 def tag_title(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    #repo_path = '/home/bint-e-shafiq/sample_repo'
+    #repo_path = '/home/muslim/sample_repo'
     #repository_name = "sample_repo"
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
     #branch_view = get_branch_view(repository_path)
@@ -111,11 +112,20 @@ def tag_title(request):
 def tag_detail(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/test_repo'
-    repository_name = "test_repo"
+    repo_path = '/home/muslim/giteverywhere'
+    repository_name = "giteverywhere"
    
     #branch_view = get_branch_view(repository_path)
     tag_list = get_tag_detail(repo_path)
+   
+    line = "";
+
+    matchObj = re.search( r'(.*) + (\.*)', line, re.M|re.I)
+
+    if matchObj:
+      matchObj.group()
+  
+   
     return {'APP_BASE': APP_BASE,
             'repo_path': repo_path,
             'repository_name': repository_name,
@@ -148,8 +158,8 @@ def commit_diff(request):
 def file_list(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/giteverywhere'
-    repository_name = "test_repo"
+    repo_path = '/home/muslim/giteverywhere'
+    repository_name = ""
    
     #branch_view = get_branch_view(repository_path)
     f_name = get_file_name(repo_path)
@@ -157,10 +167,13 @@ def file_list(request):
     
     #d = f_name[0]['file_name']
     a = range(len(f_name))
-    
-    for s in range(len(f_name)): 
-    
-      d = f_name[s]['file_name']
+    d = []
+    for s in a:
+     
+       
+     m = f_name[s]['file_name']
+     d.append(m)
+     
           
     for i in f_name:
       l = i['file_name']
@@ -169,9 +182,11 @@ def file_list(request):
             'repo_path': repo_path,
             'repository_name': repository_name,
             'f_name': f_name,
-            'd' : d,
+            
             'l': l,
             'a': a,
+            'd' : d,
+            'm': m,
             's': s
             #'file_name':file_name
             }
@@ -181,7 +196,7 @@ def file_list(request):
 def file_content(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/giteverywhere'
+    repo_path = '/home/muslim/giteverywhere'
     repository_name = "test_repo"
     
     

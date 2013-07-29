@@ -25,7 +25,7 @@ The git app
    <tr class="${loop.cycle('oddrow', 'evenrow')}">
    
    
-   <td><a href="${request.route_url('git.contents', f_name=d)}">${f['file_name']}</a></td>
+   <td><a href="${request.route_url('git.contents', f_name = m)}">${f['file_name']}</a></td>
    
       </tr>
       %endfor  

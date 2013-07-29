@@ -100,12 +100,14 @@ def get_tag_detail(repo_path):
     #r = re.compile("(\w.(.*))\n")
     s = subprocess.check_output("cd %s; git log -p -2" % repo_path, shell=True)
     #s = subprocess.check_output("cd %s; git show " % repo_path, shell=True)
+    #r = re.compile("((.*))[?+]")
+   # r = re.compile("(([?^+-])(.*))\n")
     r = re.compile("((.*))\n")
     matches = r.findall(s)
+    
     for m in matches:
         tags.append(dict(tag_title=m[0].strip()))
-
-
+   
     return tags
     
 def get_commit_difference(repo_path):
