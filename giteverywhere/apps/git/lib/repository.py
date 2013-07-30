@@ -100,9 +100,11 @@ def get_tag_detail(repo_path):
     #r = re.compile("(\w.(.*))\n")
     s = subprocess.check_output("cd %s; git log -p -2" % repo_path, shell=True)
     #s = subprocess.check_output("cd %s; git show " % repo_path, shell=True)
-    #r = re.compile("((.*))[?+]")
-   # r = re.compile("(([?^+-])(.*))\n")
-    r = re.compile("((.*))\n")
+    
+    #r = re.compile("((^[+-])(.*))\n^", re.M)
+    r = re.compile("((^[+-]) (.*?))\n", re.M+re.S)
+    #r = re.compile("(([+-])(.*))\n")
+   # r = re.compile("((.*))")
     matches = r.findall(s)
     
     for m in matches:
