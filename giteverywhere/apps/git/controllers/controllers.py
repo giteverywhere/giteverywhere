@@ -1,5 +1,6 @@
 from pyramid.view import view_config
 import os
+#import operator
 from ..models import (
     DBSession,
     #include your models here
@@ -16,8 +17,14 @@ from ..lib.repository import get_comit_log
 from ..lib.repository import get_tag_list
 from ..lib.repository import get_tag_detail
 from ..lib.repository import get_commit_difference
+from ..lib.repository import get_comit_difference
 from ..lib.repository import get_file_name
 from ..lib.repository import get_file_contents
+from ..lib.repository import get_subdir
+from ..lib.repository import get_dir
+from ..lib.repository import dir_detail
+from ..lib.repository import get_branch_name
+from ..lib.repository import get_commit_record
 
 from .. import APP_NAME, PROJECT_NAME, APP_BASE
 
@@ -36,24 +43,22 @@ def log(request):
     comit_log = get_comit_log(r.repo_path)
     return {'APP_BASE': APP_BASE,   
             'repo_path': r.repo_path,
-            'repository_name': r.repo_name,
+            'repo': r.repo_name,
             'comit_log': comit_log}
   
-    
-    
-
 
 @view_config(route_name=APP_NAME+'.log', renderer='%s:templates/log.mako' % APP_BASE)
 def log_view(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-   
-    repo_path = '/home/bint-e-shafiq/test_repo'
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+   # repo_path = '/home/bint-e-shafiq/test_repo'
     repository_name = "test_repo"
     b_name = request.matchdict['b_name']
-    commit_log = get_commit_log(repo_path,b_name)
+    commit_log = get_commit_log(r.repo_path,b_name)
+   # commit_log = sorted(comit, key=lambda k: k['message'])   
     return {'APP_BASE': APP_BASE,
-            'repo_path': repo_path,
+            'repo_path': r.repo_path,
             'repository_name': repository_name,
             'b_name' : b_name,
             'commit_log': commit_log}
@@ -67,14 +72,21 @@ def branch_log(request):
     #repository_name = "test_repo"
     
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
-    
-
+   
     #branch_view = get_branch_view(repository_path)
     branch_view = get_branch_view(r.repo_path)
+    d = []
+    a = range(len(branch_view))
+    for s in a:
+        m = branch_view[s]['branch_name']
+        d.append(m)
+        
     return {'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
             'repository_name': r.repo_name,
-            'branch_view': branch_view}
+            'branch_view': branch_view,
+            'd':d
+            }
 
             
             
@@ -108,13 +120,12 @@ def tag_title(request):
             
 
 @view_config(route_name=APP_NAME+'.showtag', renderer='%s:templates/tag.mako' % APP_BASE)
-def tag_detail(request):
-    #Note: change the repository path to a repository on your system
-    #      that you want to view the log for
+def tag_info(request):
+  
     repo_path = '/home/bint-e-shafiq/test_repo'
     repository_name = "test_repo"
    
-    #branch_view = get_branch_view(repository_path)
+
     tag_list = get_tag_detail(repo_path)
     return {'APP_BASE': APP_BASE,
             'repo_path': repo_path,
@@ -144,35 +155,53 @@ def commit_diff(request):
             'view_diff': view_diff
             }
             
+            
+@view_config(route_name=APP_NAME+'.cdiff', renderer='%s:templates/cdiff.mako' % APP_BASE)
+def com_diff(request):
+    #Note: change the repository path to a repository on your system
+    #      that you want to view the log for
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    c_hash = request.matchdict['hash']
+    comit_diff = get_comit_difference(r.repo_path,c_hash)
+    return {'APP_BASE': APP_BASE,
+            'repo_path': r.repo_path,
+            'repository_name': r.repo_name,
+            'comit_diff': comit_diff
+            }
+            
+            
 @view_config(route_name=APP_NAME+'.files', renderer='%s:templates/file_names.mako' % APP_BASE)
 def file_list(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/giteverywhere'
-    repository_name = "test_repo"
-   
-    #branch_view = get_branch_view(repository_path)
-    f_name = get_file_name(repo_path)
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+
+    f_name = get_file_name(r.repo_path)
     #file_name = f_name
+
+    
     
     #d = f_name[0]['file_name']
     a = range(len(f_name))
-    
-    for s in range(len(f_name)): 
-    
-      d = f_name[s]['file_name']
+    d = []
+    #for s in range(len(f_name)): 
+    for s in a:
+      m = f_name[s]['file_name']
+      d.append(m)
+     # d = f_name[s]['file_name']
           
     for i in f_name:
       l = i['file_name']
       
     return {'APP_BASE': APP_BASE,
-            'repo_path': repo_path,
-            'repository_name': repository_name,
+            'repo_name':r.repo_name,
+            'repo_path': r.repo_path,
             'f_name': f_name,
             'd' : d,
             'l': l,
             'a': a,
-            's': s
+            's': s,
+            'i': i
             #'file_name':file_name
             }
             
@@ -181,22 +210,79 @@ def file_list(request):
 def file_content(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-    repo_path = '/home/bint-e-shafiq/giteverywhere'
-    repository_name = "test_repo"
     
+    #r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    f_name = request.matchdict['f_name'] 
+    repo_path = os.path.join('/home/bint-e-shafiq',request.matchdict['repo'])
+    s = os.path.isdir(os.path.join(repo_path, f_name))
+    #if not item.startswith('.'):
+    directory = {}
+    file_contents = {}
+    if s == True:
+        file_contents = get_file_contents(repo_path,f_name)
+    else:
+        directory = get_subdir(repo_path,f_name) 
+        
+    repo =os.path.join(request.matchdict['repo'],f_name)
     
-    #repo = request.matchdict['repo_name']
-
-    f_name = request.matchdict['f_name']
-   
-    #branch_view = get_branch_view(repository_path)
-    file_contents = get_file_contents(repo_path,f_name)
+   # file_contents = os.listdir(r.repo_path)
     return {'APP_BASE': APP_BASE,
             'repo_path': repo_path,
-	    #'repo':repo,
-            'repository_name': repository_name,
+            'repo':repo,
+            #'repository_name': r.repo_name,
             'f_name':f_name,
+            'directory':directory,
             'file_contents': file_contents}
+            
+@view_config(route_name=APP_NAME+'.dir', renderer='%s:templates/dir.mako' % APP_BASE)
+def tag_detail(request):
+ 
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+
+    repo_path = r.repo_path
+    browse_dir = get_dir(repo_path)
+    return {'APP_BASE': APP_BASE,
+            'repo_path': repo_path,
+            #'repository_name': repository_name,
+            'browse_dir': browse_dir}
+            
+@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_names.mako' % APP_BASE)
+def branch(request):
+    
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    branches_names = get_branch_name(r.repo_path)
+    
+    #d = []
+    #a = range(len(branches_names))
+    #for i in a:
+     #   m = branches_names[i]['branch_name']
+       # b_name = m
+        #d.append(m)
+    comit_record = get_commit_record(r.repo_path,branches_names)
+    
+    #comit_record = sorted(commit_record, key=lambda k: k['datetime']) 
+    #comit_record = sorted(commit_record, key=operator.itemgetter('datetime'))
+    return {'APP_BASE': APP_BASE,
+            'repo_path': r.repo_path,
+            'repository_name': r.repo_name,
+            'branches_names': branches_names,
+         #   'd':d,
+          #  'b_name':b_name,
+            'comit_record':comit_record
+            }
+            
+@view_config(route_name=APP_NAME+'.browse', renderer='%s:templates/browse.mako' % APP_BASE)
+def brwse_dir(request):
+  
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+
+    repo_path = r.repo_path
+    f_name = request.matchdict['f_name']
+    repo_path = os.path.join(repo_path ,f_name)
+    contents = dir_detail(repo_path)
+    return {'APP_BASE': APP_BASE,
+           # 'repo_path': repo_path,
+            'contents': contents}
             
 @view_config(route_name=APP_NAME+'.manage', renderer='%s:templates/manage.mako' % APP_BASE)
 def manage_branch(request):

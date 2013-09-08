@@ -10,6 +10,9 @@ The git app
   <table>
     <tr class="tr_heading">
       <th>Branch name</th>
+      ${branch_view}</br>
+      ${d}</br>
+      
     </tr>
    %for branch in branch_view:
    <tr class="${loop.cycle('oddrow', 'evenrow')}">

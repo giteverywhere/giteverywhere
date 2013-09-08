@@ -1,30 +1,42 @@
-<%inherit file="/base.mako"/>
+ <%inherit file="/base.mako"/>
 
 <%def name="title()">
 The git app
 </%def>
 
 <div>
-       
+  <h1>Viewing branch view of repository: ${repository_name}</h1>
   
   <table>
     <tr class="tr_heading">
+      <th>Branch name</th>
+      ${branches_names}</br>
+ 
+     
+    </tr>
+   %for branch in branches_names:
+   <tr class="${loop.cycle('oddrow', 'evenrow')}">
+   <td>${branch['branch_name']}</td>
+      </tr>
+      %endfor  
+  </table>
+  
+  
+   <table>
+    <tr class="tr_heading">
+   
       <th>Commit Hash</th>
       <th>Author</th>
       <th>Date & Time</th>
       <th>Commit Message</th>
     </tr>
-    %for commit in comit_log:
+    %for commit in comit_record:
     <tr class="${loop.cycle('oddrow', 'evenrow')}">
+      
       <td>${commit['commit_hash']}</td>
       <td>${commit['author']}</td>
       <td>${commit['datetime']}</td>
       <td>${commit['message'].replace("\n", "<br />\n") | n}</td>
-      <td><a href="${request.route_url('git.cdiff', repo=repo, hash=commit['commit_hash'])}">Difference</a></td>
-
-
-     
-       
     </tr>
     %endfor
   </table>

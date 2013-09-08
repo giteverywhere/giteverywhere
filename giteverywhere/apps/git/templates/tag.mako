@@ -13,7 +13,8 @@ The git app
     </tr>
    %for tag in tag_list:
    <tr class="${loop.cycle('oddrow', 'evenrow')}">
-   <td>${tag['tag_title']}</td>
+
+   <td><h2 style="${loop.cycle('background-color:pink;', 'background-color:lightgreen;')}">${tag['tag_title']}</h2></td>
    
       </tr>
       %endfor  

@@ -15,7 +15,11 @@ The git app
     
      <a href="${request.route_url('git.tag', repo=repo)}">Tags</a> &nbsp;&nbsp;&nbsp;&nbsp;
      
-     <a href="${request.route_url('git.diff', repo=repo)}">Difference</a>
+     <a href="${request.route_url('git.diff', repo=repo)}">Difference</a>&nbsp;&nbsp;&nbsp;&nbsp;
+     
+     <a href="${request.route_url('git.files', repo=repo)}">List</a>&nbsp;&nbsp;&nbsp;&nbsp;
+     
+     <a href="${request.route_url('git.browse', repo=repo)}">Browse</a>&nbsp;&nbsp;&nbsp;&nbsp;
      
        
 

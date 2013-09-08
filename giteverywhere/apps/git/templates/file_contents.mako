@@ -6,10 +6,12 @@ The git app
 </%def>
 
 <div>
-  <h1>Viewing all files of repository: ${repository_name}</h1>
+  <h1>Viewing all files of repository: </h1>
   
-  ${f_name}
-  
+  ${repo_path}</br>
+  ${repo}</br>
+    ${f_name}</br>
+
   <table>
     <tr class="tr_heading">
       <th>Files</th>
@@ -18,8 +20,15 @@ The git app
    %for file in file_contents:
    <tr class="${loop.cycle('oddrow', 'evenrow')}">
    
+   <td><a href="${request.route_url('git.contents',repo=repo , f_name=file['file_content'])}">${file['file_content']}</a></td>
+   
+      </tr>
+      %endfor  
+      
+    %for file in directory:
+   <tr class="${loop.cycle('oddrow', 'evenrow')}">
+   
    <td>${file['file_content']}</a></td>
-
    
       </tr>
       %endfor  
