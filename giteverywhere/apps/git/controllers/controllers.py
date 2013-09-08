@@ -1,10 +1,10 @@
 from pyramid.view import view_config
 import os
-<<<<<<< HEAD
+
 #import operator
-=======
+
 import re
->>>>>>> 78bd82924af54c76a6ac5cc5a31f6b803b3a6013
+
 from ..models import (
     DBSession,
     #include your models here
@@ -55,13 +55,13 @@ def log(request):
 def log_view(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-<<<<<<< HEAD
+
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
    # repo_path = '/home/bint-e-shafiq/test_repo'
-=======
+
    
-    repo_path = '/home/muslim/test_repo'
->>>>>>> 78bd82924af54c76a6ac5cc5a31f6b803b3a6013
+   
+
     repository_name = "test_repo"
     b_name = request.matchdict['b_name']
     commit_log = get_commit_log(r.repo_path,b_name)
@@ -129,18 +129,25 @@ def tag_title(request):
             
 
 @view_config(route_name=APP_NAME+'.showtag', renderer='%s:templates/tag.mako' % APP_BASE)
-<<<<<<< HEAD
+
 def tag_info(request):
   
     repo_path = '/home/bint-e-shafiq/test_repo'
     repository_name = "test_repo"
-=======
+   
+
+    tag_list = get_tag_detail(repo_path)
+    return {'APP_BASE': APP_BASE,
+            'repo_path': repo_path,
+            'repository_name': repository_name,
+            'tag_list': tag_list}
+'''
 def tag_detail(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
     repo_path = '/home/muslim/giteverywhere'
     repository_name = "giteverywhere"
->>>>>>> 78bd82924af54c76a6ac5cc5a31f6b803b3a6013
+
    
 
     tag_list = get_tag_detail(repo_path)
@@ -157,7 +164,7 @@ def tag_detail(request):
             'repo_path': repo_path,
             'repository_name': repository_name,
             'tag_list': tag_list}
-            
+ '''           
             
 @view_config(route_name=APP_NAME+'.diff', renderer='%s:templates/diff.mako' % APP_BASE)
 def commit_diff(request):
@@ -200,17 +207,18 @@ def com_diff(request):
 def file_list(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-<<<<<<< HEAD
+    '''
+
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
 
     f_name = get_file_name(r.repo_path)
-=======
+
     repo_path = '/home/muslim/giteverywhere'
     repository_name = ""
    
     #branch_view = get_branch_view(repository_path)
     f_name = get_file_name(repo_path)
->>>>>>> 78bd82924af54c76a6ac5cc5a31f6b803b3a6013
+
     #file_name = f_name
 
     
@@ -218,20 +226,20 @@ def file_list(request):
     #d = f_name[0]['file_name']
     a = range(len(f_name))
     d = []
-<<<<<<< HEAD
+
     #for s in range(len(f_name)): 
     for s in a:
       m = f_name[s]['file_name']
       d.append(m)
      # d = f_name[s]['file_name']
-=======
+
     for s in a:
      
        
      m = f_name[s]['file_name']
      d.append(m)
      
->>>>>>> 78bd82924af54c76a6ac5cc5a31f6b803b3a6013
+
           
     for i in f_name:
       l = i['file_name']
@@ -243,29 +251,80 @@ def file_list(request):
             
             'l': l,
             'a': a,
-<<<<<<< HEAD
+
             's': s,
             'i': i
-=======
+
             'd' : d,
             'm': m,
             's': s
->>>>>>> 78bd82924af54c76a6ac5cc5a31f6b803b3a6013
+
             #'file_name':file_name
             }
-            
+    '''
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+
+    f_name = get_file_name(r.repo_path)
+    #file_name = f_name
+
+    
+    
+    #d = f_name[0]['file_name']
+    a = range(len(f_name))
+    d = []
+    #for s in range(len(f_name)): 
+    for s in a:
+      m = f_name[s]['file_name']
+      d.append(m)
+     # d = f_name[s]['file_name']
+          
+    for i in f_name:
+      l = i['file_name']
+      
+    return {'APP_BASE': APP_BASE,
+            'repo_name':r.repo_name,
+            'repo_path': r.repo_path,
+            'f_name': f_name,
+            'd' : d,
+            'l': l,
+            'a': a,
+            's': s,
+            'i': i
+            #'file_name':file_name
+            }
             
 @view_config(route_name=APP_NAME+'.contents', renderer='%s:templates/file_contents.mako' % APP_BASE)
 def file_content(request):
     #Note: change the repository path to a repository on your system
     #      that you want to view the log for
-<<<<<<< HEAD
-=======
-    repo_path = '/home/muslim/giteverywhere'
-    repository_name = "test_repo"
->>>>>>> 78bd82924af54c76a6ac5cc5a31f6b803b3a6013
+
+    #repo_path = '/home/muslim/giteverywhere'
+    #repository_name = "test_repo"
+
     
     #r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    '''f_name = request.matchdict['f_name'] 
+    repo_path = os.path.join('/home/bint-e-shafiq',request.matchdict['repo'])
+    s = os.path.isdir(os.path.join(repo_path, f_name))
+    #if not item.startswith('.'):
+    directory = {}
+    file_contents = {}
+    if s == True:
+        file_contents = get_file_contents(repo_path,f_name)
+    else:
+        directory = get_subdir(repo_path,f_name) 
+        
+    repo =os.path.join(request.matchdict['repo'],f_name)
+    
+   # file_contents = os.listdir(r.repo_path)
+    return {'APP_BASE': APP_BASE,
+            'repo_path': repo_path,
+            'repo':repo,
+            #'repository_name': r.repo_name,
+            'f_name':f_name,
+            'directory':directory,
+            'file_contents': file_contents}
+            '''
     f_name = request.matchdict['f_name'] 
     repo_path = os.path.join('/home/bint-e-shafiq',request.matchdict['repo'])
     s = os.path.isdir(os.path.join(repo_path, f_name))
