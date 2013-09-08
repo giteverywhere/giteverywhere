@@ -9,7 +9,6 @@ def application_routes(config):
     config.add_route(APP_NAME + '.branch', '/branch/{repo}')
     config.add_route(APP_NAME + '.cbranch', '/cbranch')
     config.add_route(APP_NAME + '.branches', '/branches/{repo}')
-    
     config.add_route(APP_NAME + '.manage', '/manage/{repo}')
     config.add_route(APP_NAME + '.tag', '/tag/{repo}')
     config.add_route(APP_NAME + '.showtag', '/showtag')
