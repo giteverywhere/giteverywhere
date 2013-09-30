@@ -18,18 +18,16 @@ The git app
            <% q.append(w) %>
         %endfor
 <div>
-<style type = "text/css">
-{background-color:${q[0]}}
-</style>
 <table>
 <tr>
-<td style = "bgcolor:${q[0]}">${q}</td>
-<td>${q}</td>
+
+<td style = "width:10px;height:20px; background-color: ${q[0]}" >${q[0]}</td>
+
 </tr>
 </table>
 </div>
 
-
+<td style = "width:5px" bgcolor = ${q[j]} >
 
 </body>
 </html>

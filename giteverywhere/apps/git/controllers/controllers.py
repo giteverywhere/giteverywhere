@@ -192,6 +192,7 @@ def file_content(request):
             
 #@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_names.mako' % APP_BASE) #show sorted record in form of table
 @view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_diagram.mako' % APP_BASE) #show branch diagram
+#@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/html.mako' % APP_BASE)
 def branch(request):
     #Note: View branch diagram or commit log of all branches of repository
     

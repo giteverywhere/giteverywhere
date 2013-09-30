@@ -36,3 +36,17 @@
 </table>
 </body></html>
 
+<div>
+<style type = "text/css">
+td
+{background-color:${q[0]}}
+</style>
+<table>
+<tr>
+<td>${q[0]}</td>
+
+
+</tr>
+</table>
+</div>
+
