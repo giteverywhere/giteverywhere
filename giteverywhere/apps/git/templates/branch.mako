@@ -10,8 +10,7 @@ The git app
   <table>
     <tr class="tr_heading">
       <th>Branch name</th>
-      ${branch_view}</br>
-      ${d}</br>
+  
       
     </tr>
    %for branch in branch_view:
@@ -22,7 +21,6 @@ The git app
   </table>
   
 </div>
-
 
 
 

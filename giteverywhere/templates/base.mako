@@ -33,7 +33,7 @@
 </body>
 </html>
 
-<%def name="title()">The PyCK Web Application Development Framework</%def>
+<%def name="title()">The PyCK Web Application Development Framework </%def>
 
 <%def name="meta()">
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>

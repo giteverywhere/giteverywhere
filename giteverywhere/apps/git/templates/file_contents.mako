@@ -8,10 +8,6 @@ The git app
 <div>
   <h1>Viewing all files of repository: </h1>
   
-  ${repo_path}</br>
-  ${repo}</br>
-    ${f_name}</br>
-
   <table>
     <tr class="tr_heading">
       <th>Files</th>

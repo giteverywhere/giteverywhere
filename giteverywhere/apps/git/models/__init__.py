@@ -19,11 +19,11 @@ class RenameTables(DeclarativeMeta):
         return DeclarativeMeta.__init__(cls, classname, bases, dict_)
 
 Base = declarative_base(metaclass=RenameTables)
-
+from models import Repository
 
 #from models import MyModel
 
-__all__ = ['DBSession', 'Base',
+__all__ = ['DBSession', 'Base','Repository',
            #'MyModel'
            ]
 

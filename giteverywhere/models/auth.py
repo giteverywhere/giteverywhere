@@ -59,22 +59,7 @@ class UserPermission(Base):
         self.permission = permission
         
 
-'''class Repository(Base):
-    __tablename__ = 'repositories'
 
-    repo_id = Column(Unicode(100), primary_key=True)
-    repo_name = Column(Unicode(200), unique=True)
-    repo_path = Column(Unicode(200), unique=True)
-    description = Column(UnicodeText)
-
-
-    def __init__(self, repo_id='', repo_name='', repo_path='', description=''):
-      self.repo_id = repo_id
-      self.repo_name = repo_name
-      self.repo_path = repo_path
-      self.description = description
-      
-'''
 
 
      

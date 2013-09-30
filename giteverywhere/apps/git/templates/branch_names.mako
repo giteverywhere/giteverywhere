@@ -10,9 +10,7 @@ The git app
   <table>
     <tr class="tr_heading">
       <th>Branch name</th>
-      ${branches_names}</br>
- 
-     
+
     </tr>
    %for branch in branches_names:
    <tr class="${loop.cycle('oddrow', 'evenrow')}">
@@ -20,11 +18,11 @@ The git app
       </tr>
       %endfor  
   </table>
-  
+ 
   
    <table>
     <tr class="tr_heading">
-   
+      <th>Branch Name</th>
       <th>Commit Hash</th>
       <th>Author</th>
       <th>Date & Time</th>
@@ -32,7 +30,7 @@ The git app
     </tr>
     %for commit in comit_record:
     <tr class="${loop.cycle('oddrow', 'evenrow')}">
-      
+      <td>${commit['branches']}</td>
       <td>${commit['commit_hash']}</td>
       <td>${commit['author']}</td>
       <td>${commit['datetime']}</td>

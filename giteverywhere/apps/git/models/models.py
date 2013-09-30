@@ -1,7 +1,10 @@
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import (
     Column,
     Integer,
     Unicode,
+    UnicodeText,
+    ForeignKey
     )
 
 from . import DBSession, Base
@@ -13,5 +16,12 @@ from . import DBSession, Base
 
 #    def __init__(self, title, content):
 #        self.title = title
+  
+class Repository(Base):
+    __tablename__ = 'repositories'
+    #__table_args__ = {'extend_existing': True}
 
-
+    repo_id = Column(Unicode(100), primary_key=True)
+    repo_name = Column(Unicode(200), unique=True) 
+    repo_path = Column(Unicode(200), unique=True)
+    description = Column(UnicodeText)

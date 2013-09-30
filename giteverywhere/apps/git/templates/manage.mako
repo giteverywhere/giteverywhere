@@ -8,10 +8,9 @@ The git app
   <h1>Branches</h1> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
  
   
-  <a href ="${request.route_url('git.clog', repo=repo)}">Commits</a>&nbsp;&nbsp;&nbsp;&nbsp;
+     <a href ="${request.route_url('git.clog', repo=repo)}">Commits</a>&nbsp;&nbsp;&nbsp;&nbsp;
 
- 
-    <a href="${request.route_url('git.branch', repo=repo)}">Branches</a> &nbsp;&nbsp;&nbsp;&nbsp;
+     <a href="${request.route_url('git.branch', repo=repo)}">Branches</a> &nbsp;&nbsp;&nbsp;&nbsp;
     
      <a href="${request.route_url('git.tag', repo=repo)}">Tags</a> &nbsp;&nbsp;&nbsp;&nbsp;
      
@@ -19,7 +18,6 @@ The git app
      
      <a href="${request.route_url('git.files', repo=repo)}">List</a>&nbsp;&nbsp;&nbsp;&nbsp;
      
-     <a href="${request.route_url('git.browse', repo=repo)}">Browse</a>&nbsp;&nbsp;&nbsp;&nbsp;
      
        
 
@@ -45,7 +43,7 @@ The git app
       <th>Date & Time</th>
       <th>Commit Message</th>
     </tr>
-    %for commit in commit_log:
+    %for commit in comit_log:
     <tr class="${loop.cycle('oddrow', 'evenrow')}">
       <td>${commit['commit_hash']}</td>
       <td>${commit['author']}</td>
