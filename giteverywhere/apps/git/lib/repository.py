@@ -221,10 +221,16 @@ def get_commit_record(repo_path,branches_names):
  
     for i in range(len(branches_names)):
         b = branches_names[i]['branch_name']
+<<<<<<< HEAD
         
         if b.startswith('*'):
             b = b[2:] 
      
+=======
+        if b.startswith('*'):
+            b = b[2:]
+
+>>>>>>> 7db4509ed17da7ed935468cc80a2378eb929bd29
         s = subprocess.check_output("cd %s; git checkout %s; git log  " % (repo_path,b), shell=True)
         r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
         matches = r.findall(s)
