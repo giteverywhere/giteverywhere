@@ -30,7 +30,7 @@ from .. import APP_NAME, PROJECT_NAME, APP_BASE
 def my_view(request):
     return {'APP_BASE': APP_BASE}
     
-@view_config(route_name=APP_NAME+'view_repo_names', renderer='view_repo_names.mako')
+@view_config(route_name=APP_NAME+'.view_repo_names', renderer='%s:templates/view_repo_names.mako'%APP_BASE)
 def view_rnames(request):
   
   view = DBSession.query(Repository).all()
@@ -191,7 +191,7 @@ def file_content(request):
             'file_contents': file_contents}
             
 #@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_names.mako' % APP_BASE) #show sorted record in form of table
-@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/nested_loop.mako' % APP_BASE) #show branch diagram
+@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_diagram.mako' % APP_BASE) #show branch diagram
 def branch(request):
     #Note: View branch diagram or commit log of all branches of repository
     
