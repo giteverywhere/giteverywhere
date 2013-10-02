@@ -26,13 +26,11 @@ The git app
                height: 5px;
                border-radius: 50%;
                background-color: blue
-               
                   }
 </style>
  
 %for i in range(len(comit_record)):
 <table cellspacing = 0 >
-
   <tr>
   %for j in range(len(b)):
            <% w = '#%02X%02X%02X' % (r(),r(),r()) %>
@@ -47,7 +45,7 @@ The git app
           </div>
           </td>        
          <td><hr style = "width:10px;height:2px;"></td>
-         <td  style = "border:1" bgcolor = "lightpink" >${comit_record[i]['branches']}</td>
+         <td  style = "border:1px; background-color:lightgray" >${comit_record[i]['branches']}</td>
          <td>&nbsp;${comit_record[i]['message']}</td>
          
          <% count = count + 1 %>
@@ -84,7 +82,6 @@ The git app
         %endfor
         <td>${comit_record[i]['message']}</td>
          <% break %>
-        
     
     </tr>
     
@@ -95,14 +92,12 @@ The git app
 </div>
 
  <div>
-
-
 <table> 
-
     <tr>
-      %for comit in comit_record:
+      %for comit in comit_record:   
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${comit['author']}</td>
+      <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${comit['datetime']}</td>
       
-      <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${comit['datetime']}</td>
     </tr>
       %endfor
   </table>

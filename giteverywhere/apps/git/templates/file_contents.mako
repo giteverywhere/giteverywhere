@@ -6,8 +6,7 @@ The git app
 </%def>
 
 <div>
-  <h1>Viewing all files of repository: </h1>
-  
+  <h1>Viewing files of repository: </h1>  
   <table>
     <tr class="tr_heading">
       <th>Files</th>
@@ -21,13 +20,18 @@ The git app
       </tr>
       %endfor  
       
-    %for file in directory:
-   <tr class="${loop.cycle('oddrow', 'evenrow')}">
-   
-   <td>${file['file_content']}</a></td>
-   
-      </tr>
-      %endfor  
+    %if directory: 
+       %if repo.endswith('.db'):   
+         <td>MESSAGE:Database file. Template cannot decode ASCI code</td>      
+      %else:
+        %for file in directory:
+        <tr class="${loop.cycle('oddrow', 'evenrow')}">
+        <td>${file['file_content']}</a></td>
+        </tr>
+         %endfor
+      %endif
+    %endif
+  
   </table>
   
 </div>
