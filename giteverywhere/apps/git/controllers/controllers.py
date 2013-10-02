@@ -190,26 +190,27 @@ def file_content(request):
             'directory':directory,
             'file_contents': file_contents}
             
+
 #@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_names.mako' % APP_BASE) #show sorted record in form of table
 @view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_diagram.mako' % APP_BASE) #show branch diagram
 #@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/html.mako' % APP_BASE)
 def branch(request):
     #Note: View branch diagram or commit log of all branches of repository
-    
+
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
-    
+
     branches_names = get_branch_view(r.repo_path)
-    
+
     comit_record = get_commit_record(r.repo_path,branches_names)
-    
+
     return {'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
             'repository_name': r.repo_name,
             'branches_names': branches_names,
-            'comit_record':comit_record
+            'comit_record': comit_record
             }
-            
-            
+
+
 @view_config(route_name=APP_NAME+'.manage', renderer='%s:templates/manage.mako' % APP_BASE)
 def manage_branch(request):
     #Note: View repository summary including branches, commits, difference, tags, branch diagram, directories , file contents
