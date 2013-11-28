@@ -6,16 +6,16 @@ The git app
 
 <div>
   <h1>Viewing branch view of repository: ${repository_name}</h1>
-  
+
   <table>
     <tr class="tr_heading">
       <th>Branch name</th>
-  
-      
+     
     </tr>
-   %for branch in branch_view:
+ 
+   %for branch in branches:
    <tr class="${loop.cycle('oddrow', 'evenrow')}">
-   <td>${branch['branch_name']}</td>
+   <td>${branch}</td>
       </tr>
       %endfor  
   </table>

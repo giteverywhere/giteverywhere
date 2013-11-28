@@ -16,12 +16,15 @@ from ..lib.repository import get_comit_log
 from ..lib.repository import get_log
 from ..lib.repository import get_tag_list
 from ..lib.repository import get_tag_detail
+from ..lib.repository import get_neg_detail
+from ..lib.repository import get_unc_contents
 from ..lib.repository import get_commit_difference
 from ..lib.repository import get_comit_difference
 from ..lib.repository import get_file_name
 from ..lib.repository import get_file_contents
 from ..lib.repository import get_subdir
 from ..lib.repository import get_commit_record
+from ..lib.repository import get_comit_record
 
 from .. import APP_NAME, PROJECT_NAME, APP_BASE
 
@@ -69,13 +72,12 @@ def branch_log(request):
   
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
    
-    branch_view = get_branch_view(r.repo_path)
-   
-        
+    branches = get_branch_view(r.repo_path)
+           
     return {'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
             'repository_name': r.repo_name,
-            'branch_view': branch_view
+            'branches': branches
           
             }
            
@@ -106,21 +108,29 @@ def tag_title(request):
             'tag_list': tag_list}
             
 
-@view_config(route_name=APP_NAME+'.showtag', renderer='%s:templates/tag.mako' % APP_BASE)
-
+#@view_config(route_name=APP_NAME+'.showtag', renderer='%s:templates/tag.mako' % APP_BASE)
+@view_config(route_name=APP_NAME+'.showtag', renderer='%s:templates/new1.mako' % APP_BASE)
 def tag_info(request):
    
     #Note: Need to be modified
-  
+    
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
     
-    tag_list = get_tag_detail(r.repo_path)
+    #tags = get_tag_detail(r.repo_path)
+    #negs = get_neg_detail(r.repo_path)
+    unc = get_unc_contents(r.repo_path)
     
+    #negs = get_neg_detail(r.repo_path)
+    
+    
+      
     return {'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
             'repository_name': r.repo_name,
-            'tag_list': tag_list}
-          
+            #'tags': tags,
+            #'negs': negs,
+            'unc':unc
+            }
             
 @view_config(route_name=APP_NAME+'.diff', renderer='%s:templates/diff.mako' % APP_BASE)
 def commit_diff(request):
@@ -190,18 +200,19 @@ def file_content(request):
             'directory':directory,
             'file_contents': file_contents}
             
-
+@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branches.mako' % APP_BASE)
 #@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_names.mako' % APP_BASE) #show sorted record in form of table
-@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_diagram.mako' % APP_BASE) #show branch diagram
-#@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/html.mako' % APP_BASE)
+#@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_diagram.mako' % APP_BASE) #show branch diagram
 def branch(request):
     #Note: View branch diagram or commit log of all branches of repository
 
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
 
     branches_names = get_branch_view(r.repo_path)
-
-    comit_record = get_commit_record(r.repo_path,branches_names)
+     
+    #comit_record = get_commit_record(r.repo_path,branches_names)
+    
+    comit_record = get_comit_record(r.repo_path,branches_names)
 
     return {'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,

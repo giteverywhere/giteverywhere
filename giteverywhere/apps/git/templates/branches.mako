@@ -1,3 +1,4 @@
+ 
  <%inherit file="/base.mako"/>
 
 <%def name="title()">
@@ -19,7 +20,6 @@ The git app
       %endfor  
   </table>
  
-  
    <table>
     <tr class="tr_heading">
       <th>Branch Name</th>
@@ -29,14 +29,16 @@ The git app
       <th>Commit Message</th>
     </tr>
     %for commit in comit_record:
+      %for j in range(len(commit)):
     <tr class="${loop.cycle('oddrow', 'evenrow')}">
-      <td>${commit['branches']}</td>
-      <td>${commit['commit_hash']}</td>
-      <td>${commit['author']}</td>
-      <td>${commit['datetime']}</td>
-      <td>${commit['message'].replace("\n", "<br />\n") | n}</td>
-      
+      <td>${commit[j]['branches']}</td>
+      <td>${commit[j]['commit_hash']}</td>
+      <td>${commit[j]['author']}</td>
+      <td>${commit[j]['datetime']}</td>
+      <td>${commit[j]['message'].replace("\n", "<br />\n") | n}</td>
+      %endfor
     </tr>
+      
     %endfor
   </table>
   

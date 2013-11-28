@@ -14,7 +14,7 @@ The git app
     
      <a href="${request.route_url('git.tag', repo=repo)}">Tags</a> &nbsp;&nbsp;&nbsp;&nbsp;
      
-     <a href="${request.route_url('git.diff', repo=repo)}">Difference</a>&nbsp;&nbsp;&nbsp;&nbsp;
+     <a href="${request.route_url('git.showtag', repo=repo)}">Difference</a>&nbsp;&nbsp;&nbsp;&nbsp;
      
      <a href="${request.route_url('git.files', repo=repo)}">List</a>&nbsp;&nbsp;&nbsp;&nbsp;
      
@@ -31,7 +31,7 @@ The git app
     </tr>
    %for branch in branch_view:
    <tr class="${loop.cycle('oddrow', 'evenrow')}">
-   <td>${branch['branch_name']}</td>
+   <td>${branch}</td>
    
       %endfor 
  

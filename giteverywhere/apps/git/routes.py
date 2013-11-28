@@ -6,7 +6,7 @@ def application_routes(config):
     config.add_route(APP_NAME + '.view_repo_names', '/view_repo_names')
     config.add_route(APP_NAME + '.log', '/log/{repo}/{b_name}')
     config.add_route(APP_NAME + '.clog', '/clog/{repo}') 
-    config.add_route(APP_NAME + '.alog', '/alog/{repo}')
+   # config.add_route(APP_NAME + '.alog', '/alog/{repo}')
     config.add_route(APP_NAME + '.branch', '/branch/{repo}')
     config.add_route(APP_NAME + '.cbranch', '/cbranch/{repo}')
     config.add_route(APP_NAME + '.branches', '/branches/{repo}')

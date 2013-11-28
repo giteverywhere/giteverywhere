@@ -36,7 +36,16 @@ def get_log(repo_path):
     r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
     matches = r.findall(s)
     for m in matches:
-        commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=m[2].strip(), message=m[3].strip()))
+        if m == matches[0]:                 # conditional statements to identify first and last commit of each branch
+	    f_commit = 'TRUE'
+	    l_commit = 'FALSE'
+	elif m == matches[-1]:
+	    f_commit = 'FALSE'
+	    l_commit = 'TRUE'
+	else:
+	    f_commit = 'FALSE'
+	    l_commit = 'FALSE'
+        commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=m[2].strip(), message=m[3].strip(), is_first = f_commit.strip(), is_last = l_commit.strip()))
           
     return commits
       
@@ -65,12 +74,15 @@ def get_branch_view(repo_path):
     s = subprocess.check_output("cd %s; git branch " % repo_path, shell=True)
     r = re.compile("((.*))\n")
     matches = r.findall(s)
-    for m in matches:
-        branches.append(dict(branch_name=m[0].strip()))
-
-
+    for m in matches: 
+        b = m[0]
+        if b.startswith('*'): 
+	   b = b[2:]             # return active branch name without *
+        branches.append(b.strip())
+        
     return branches
- 
+   
+
 def get_current_branch(repository_path):
   
   # Given path to a repository on local system, returns active branch of the repository
@@ -105,19 +117,49 @@ def get_tag_detail(repo_path):
     """
     Given path to a repository on local system, returns difference of last two commits, showing added lines of code in green color and deleted lines of code in red color (Not working)
     """
-    tags = []
-  
+    '''
     s = subprocess.check_output("cd %s; git log -p -2" % repo_path, shell=True) 
     #r = re.compile("((^[+-]) (.*?))\n", re.M+re.S) # just show channges in file contents
     r = re.compile("((^[+-])(.*?))\n", re.M+re.S+re.U) # show detailed insertions and deletions in contents of file
+    '''
+    tags = []
     
+    s = subprocess.check_output("cd %s; git log -p -2" % repo_path, shell=True)
+    r = re.compile("((^[+])(.*?))\n", re.M+re.S)
+   
     matches = r.findall(s)
-    
     for m in matches:
         tags.append(dict(tag_title=m[0].strip()))
-   
+                  
     return tags
     
+def get_neg_detail(repo_path):  
+
+    negs = []
+    
+    s = subprocess.check_output("cd %s; git log -p -2" % repo_path, shell=True)
+    n = re.compile("((^[-])(.*?))\n", re.M+re.S+re.I)
+
+    matches = n.findall(s)
+    for m in matches:
+        negs.append(dict(neg_title=m[0].strip()))
+    
+    return negs
+    
+def get_unc_contents(repo_path):
+  
+    unc = []
+    
+    s = subprocess.check_output("cd %s; git log -p -2" % repo_path, shell=True)
+    #u = re.compile("(^(?![commitAuthorDate\s])(.*?))\n", re.M+re.S+re.U)   #doesn't remove 'No new line at end of file'
+    u = re.compile("((^(?![commitAuthorDate\s\\\]))(.*?))\n", re.M+re.S+re.U)
+    #u = re.compile("((.*))\n")
+    matches = u.findall(s)
+    for m in matches:
+        unc.append(dict(unc_title=m[0].strip()))
+    
+    return unc
+            
 def get_comit_difference(repo_path,c_hash):
     """
     Given path to a repository on local system, returns a list differences of last two commits without showing code, just show number of insertions and deletions made along the file names
@@ -207,46 +249,74 @@ def get_subdir(repo_path,f_name):
 
 
     return contents
+
+def get_comit_record(repo_path,branches_names):
+    """
+    Given path to a repository on local system along list of branches of repository, returns commit log of all branches sorted by date and time, without repeating same commit log
+    """    
+    log = []
+    
+    if 'master' in branches_names:
+        del branches_names[branches_names.index('master')]
+        branches_names.insert(0,'master') 
         
+    for b in branches_names:      
+        log.append([])
+        s = subprocess.check_output("cd %s; git checkout %s; git log  " % (repo_path,b), shell=True)
+        r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
+        matches = r.findall(s)
+        for m in matches[::-1]:
+	        
+	    l = m[2][3:len(m[2])-6]    #  m[2] contains date and time of commit log
+	    
+	    time = datetime.datetime.strptime(l, '%a %b %d %H:%M:%S %Y')  #  parses datetime string ('l' here) according to format
+	    log[branches_names.index(b)].append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=time, message=m[3].strip(),branches = b.strip()))
+
+    return log
+    
 def get_commit_record(repo_path,branches_names):
     """
     Given path to a repository on local system along list of branches of repository, returns commit log of all branches sorted by date and time, without repeating same commit log
-    """
-    
+    """    
     commits = []
-    comit_record = []
-    comit = []
-    s = [] 
-    time = []
- 
-    for i in range(len(branches_names)):
-        b = branches_names[i]['branch_name']
-        
-        if b.startswith('*'):
-            b = b[2:] 
+    commit_record = []  
     
+    if 'master' in branches_names:
+        del branches_names[branches_names.index('master')]
+        branches_names.insert(0,'master') 
+        
+    for b in branches_names:      
+        
         s = subprocess.check_output("cd %s; git checkout %s; git log  " % (repo_path,b), shell=True)
         r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
         matches = r.findall(s)
         for m in matches:
-	    s = m[2][3:len(m[2])-6]    #  m[2] contains date and time of commit log
-	    time = datetime.datetime.strptime(s, '%a %b %d %H:%M:%S %Y')
-            commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=time, message=m[3].strip(), branches = b.strip()))
+	        
+	    l = m[2][3:len(m[2])-6]    #  m[2] contains date and time of commit log
+	    
+	    time = datetime.datetime.strptime(l, '%a %b %d %H:%M:%S %Y')  #  parses datetime string ('l' here) according to format
+	    
+	    commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=time, message=m[3].strip(),branches = b.strip()))
      
-        if not comit_record:
-            comit_record = commits + comit_record  #concatenate bcz comit_record is empty
+        if not commit_record:
+            commit_record = commits + commit_record  #concatenate bcz comit_record is empty
              
-        else:
-	    for t in range(len(commits)):
-	        for j in range(len(comit_record)):
-		    if (commits[t]['commit_hash'] != comit_record[j]['commit_hash']):
-		        if (j == len(comit_record)-1):
-			    comit_record.append(commits[t])
-			 
+        else:                   
+	    for t in commits:         # comapare commit hash to avoid repitition of same commit log
+	        for j in commit_record:
+		    if (t ['commit_hash'] != j['commit_hash']):
+		        if j == commit_record[-1]:    
+			    commit_record.append(t)
 	            else:
 		        break
-   
-    comit_record = sorted(comit_record, key=operator.itemgetter('datetime'), reverse = True)
-    return comit_record
+        commit_record = sorted(commit_record, key=operator.itemgetter('datetime'), reverse = True)    # sort commit record according to date and time	
+    
+        #for cr in commit_record:
+	    
+	    #if (b != cr ['branches']):    # append parent branch (branch which is missed due to same commit hash)
+	        #if cr == commit_record[-1]:
+		    #commit_record.append(dict(commit_hash='', author='', datetime='' , message='',is_first = '',is_last = '', branches = b))     
+	    #else:
+	        #break    
+    return commit_record
      
-
