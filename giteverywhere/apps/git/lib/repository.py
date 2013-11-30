@@ -271,9 +271,79 @@ def get_comit_record(repo_path,branches_names):
 	    
 	    time = datetime.datetime.strptime(l, '%a %b %d %H:%M:%S %Y')  #  parses datetime string ('l' here) according to format
 	    log[branches_names.index(b)].append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=time, message=m[3].strip(),branches = b.strip()))
+	    
 
     return log
     
+def get_record(repo_path,branches_names,comit_record):
+    log = []
+    log = comit_record
+    branches = branches_names
+    cm = []
+    branch = []
+    if not cm:
+        cm.append(log[0])
+        cm.append([])
+        cm.append([])
+    for b in range(len(branches)):
+        branch = []
+        for c in range(len(log[b])):	    
+            s = subprocess.check_output("cd %s; git branch --contains %s" % (repo_path,log[b][c]['commit_hash']), shell=True)
+            r = re.compile("((.*))\n")
+            matches = r.findall(s)
+            for m in matches:
+                w = m[0]
+                if w.startswith('*'): 
+	            w = w[2:]            
+                branch.append(w.strip())            
+            for m in branch:                
+                if log[b][c]['branches']!= m :
+                    for t in range(len(log[branches.index(m)])):
+                        if log[b][c]==log[branches.index(m)][t]:
+                            t = len(log[branches.index(m)])
+                            break
+                        else:             
+			      if log[branches.index(m)][t] not in cm[branches.index(m)]:
+				  if log[branches.index(m)][t]==log[branches.index(m)][-1]:
+                                     cm[branches.index(m)].append(log[branches.index(m)][t])
+                else:
+		    break          
+            
+                
+    return cm
+            
+def get_rec(repo_path,branches_names,comit_record):
+     
+    log = []
+    log = comit_record
+    branches = branches_names
+    cm = log
+    branch = []
+     
+    for b in range(len(branches)):
+      for c in range(len(log[b])):
+        branch = []
+        s = subprocess.check_output("cd %s; git branch --contains %s" % (repo_path,log[b][c]['commit_hash']), shell=True)
+        r = re.compile("((.*))\n")
+        matches = r.findall(s)
+        for m in matches:
+          w = m[0]
+          if w.startswith('*'): 
+            w = w[2:]            
+          branch.append(w.strip()) 
+        for m in branch:                
+         
+          if log[b][c]['branches']!= m :
+            for t in range(len(cm[branches.index(m)])):
+              if log[b][c]['commit_hash']==log[branches.index(m)][t]['commit_hash']:
+                del cm[branches.index(m)][t]
+                t = len(cm[branches.index(m)])
+              else:
+                break
+ 
+             
+    return cm
+   
 def get_commit_record(repo_path,branches_names):
     """
     Given path to a repository on local system along list of branches of repository, returns commit log of all branches sorted by date and time, without repeating same commit log

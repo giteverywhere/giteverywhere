@@ -19,7 +19,7 @@ The git app
       </tr>
       %endfor  
   </table>
- 
+  ${diagram_record}
    <table>
     <tr class="tr_heading">
       <th>Branch Name</th>
@@ -43,3 +43,5 @@ The git app
   </table>
   
 </div>
+
+
