@@ -25,7 +25,6 @@ from ..lib.repository import get_file_contents
 from ..lib.repository import get_subdir
 from ..lib.repository import get_commit_record
 from ..lib.repository import get_comit_record
-from ..lib.repository import get_record
 from ..lib.repository import get_rec
 
 from .. import APP_NAME, PROJECT_NAME, APP_BASE
@@ -202,9 +201,9 @@ def file_content(request):
             'directory':directory,
             'file_contents': file_contents}
             
-@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branches.mako' % APP_BASE)
+#@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branches.mako' % APP_BASE)
 #@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_names.mako' % APP_BASE) #show sorted record in form of table
-#@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_diagram.mako' % APP_BASE) #show branch diagram
+@view_config(route_name=APP_NAME+'.branches', renderer='%s:templates/branch_diagram.mako' % APP_BASE) #show branch diagram
 def branch(request):
     #Note: View branch diagram or commit log of all branches of repository
 

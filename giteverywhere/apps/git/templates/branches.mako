@@ -19,24 +19,28 @@ The git app
       </tr>
       %endfor  
   </table>
-  ${diagram_record}
    <table>
     <tr class="tr_heading">
       <th>Branch Name</th>
       <th>Commit Hash</th>
       <th>Author</th>
       <th>Date & Time</th>
+      <th>First Commit</th>
+      <th>Last Commit</th>
       <th>Commit Message</th>
+
     </tr>
-    %for commit in comit_record:
-      %for j in range(len(commit)):
+    %for commit in diagram_record:
+     
     <tr class="${loop.cycle('oddrow', 'evenrow')}">
-      <td>${commit[j]['branches']}</td>
-      <td>${commit[j]['commit_hash']}</td>
-      <td>${commit[j]['author']}</td>
-      <td>${commit[j]['datetime']}</td>
-      <td>${commit[j]['message'].replace("\n", "<br />\n") | n}</td>
-      %endfor
+      <td>${commit['branches']}</td>
+      <td>${commit['commit_hash']}</td>
+      <td>${commit['author']}</td>
+      <td>${commit['datetime']}</td>
+      <td>${commit['is_first']}</td>
+      <td>${commit['is_last']}</td>
+      <td>${commit['message'].replace("\n", "<br />\n") | n}</td>
+     
     </tr>
       
     %endfor

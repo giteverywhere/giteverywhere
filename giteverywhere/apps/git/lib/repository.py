@@ -266,59 +266,22 @@ def get_comit_record(repo_path,branches_names):
         r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
         matches = r.findall(s)
         for m in matches[::-1]:
+	
 	        
-	    l = m[2][3:len(m[2])-6]    #  m[2] contains date and time of commit log
+	  l = m[2][3:len(m[2])-6]    #  m[2] contains date and time of commit log
 	    
-	    time = datetime.datetime.strptime(l, '%a %b %d %H:%M:%S %Y')  #  parses datetime string ('l' here) according to format
-	    log[branches_names.index(b)].append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=time, message=m[3].strip(),branches = b.strip()))
+	  time = datetime.datetime.strptime(l, '%a %b %d %H:%M:%S %Y')  #  parses datetime string ('l' here) according to format
+	  log[branches_names.index(b)].append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=time, message=m[3].strip(),is_first = '', is_last = '', branches = b.strip()))
 	    
 
     return log
-    
-def get_record(repo_path,branches_names,comit_record):
-    log = []
-    log = comit_record
-    branches = branches_names
-    cm = []
-    branch = []
-    if not cm:
-        cm.append(log[0])
-        cm.append([])
-        cm.append([])
-    for b in range(len(branches)):
-        branch = []
-        for c in range(len(log[b])):	    
-            s = subprocess.check_output("cd %s; git branch --contains %s" % (repo_path,log[b][c]['commit_hash']), shell=True)
-            r = re.compile("((.*))\n")
-            matches = r.findall(s)
-            for m in matches:
-                w = m[0]
-                if w.startswith('*'): 
-	            w = w[2:]            
-                branch.append(w.strip())            
-            for m in branch:                
-                if log[b][c]['branches']!= m :
-                    for t in range(len(log[branches.index(m)])):
-                        if log[b][c]==log[branches.index(m)][t]:
-                            t = len(log[branches.index(m)])
-                            break
-                        else:             
-			      if log[branches.index(m)][t] not in cm[branches.index(m)]:
-				  if log[branches.index(m)][t]==log[branches.index(m)][-1]:
-                                     cm[branches.index(m)].append(log[branches.index(m)][t])
-                else:
-		    break          
-            
-                
-    return cm
             
 def get_rec(repo_path,branches_names,comit_record):
      
-    log = []
     log = comit_record
     branches = branches_names
     cm = log
-    branch = []
+    cmt = []
      
     for b in range(len(branches)):
       for c in range(len(log[b])):
@@ -331,18 +294,30 @@ def get_rec(repo_path,branches_names,comit_record):
           if w.startswith('*'): 
             w = w[2:]            
           branch.append(w.strip()) 
-        for m in branch:                
-         
+        for m in branch:                     
           if log[b][c]['branches']!= m :
-            for t in range(len(cm[branches.index(m)])):
-              if log[b][c]['commit_hash']==log[branches.index(m)][t]['commit_hash']:
-                del cm[branches.index(m)][t]
-                t = len(cm[branches.index(m)])
-              else:
-                break
- 
-             
-    return cm
+              for t in range(branches.index(m)):	      
+	        if log[b][c]['commit_hash']== cm[branches.index(m)][t]['commit_hash']:
+                   del cm[branches.index(m)][t]
+                   t = len(cm[branches.index(m)])
+                else:
+	          break
+                  
+                  
+    for FL in range(len(cm)):
+      for dic in range(len(cm[FL])):
+          if cm[FL][dic] == cm[FL][0]:                 # conditional statements to identify first and last commit of each branch
+            cm[FL][dic]['is_first'] = 'TRUE'
+            cm[FL][dic]['is_last'] = 'FALSE' 
+          elif cm[FL][dic] == cm[FL][-1]:
+	    cm[FL][dic]['is_first'] = 'FALSE'
+            cm[FL][dic]['is_last'] = 'TRUE'
+          else:
+	    cm[FL][dic]['is_first'] = 'FALSE'
+            cm[FL][dic]['is_last'] = 'FALSE'
+          cmt.append(cm[FL][dic])
+      cmt = sorted(cmt, key=operator.itemgetter('datetime'), reverse = True)
+    return cmt
    
 def get_commit_record(repo_path,branches_names):
     """
@@ -381,12 +356,6 @@ def get_commit_record(repo_path,branches_names):
 		        break
         commit_record = sorted(commit_record, key=operator.itemgetter('datetime'), reverse = True)    # sort commit record according to date and time	
     
-        #for cr in commit_record:
-	    
-	    #if (b != cr ['branches']):    # append parent branch (branch which is missed due to same commit hash)
-	        #if cr == commit_record[-1]:
-		    #commit_record.append(dict(commit_hash='', author='', datetime='' , message='',is_first = '',is_last = '', branches = b))     
-	    #else:
-	        #break    
+          
     return commit_record
      
