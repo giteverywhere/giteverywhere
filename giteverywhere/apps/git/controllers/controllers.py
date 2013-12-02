@@ -25,7 +25,8 @@ from ..lib.repository import get_file_contents
 from ..lib.repository import get_subdir
 from ..lib.repository import get_commit_record
 from ..lib.repository import get_comit_record
-from ..lib.repository import get_rec
+from ..lib.repository import del_common_cmt
+from ..lib.repository import get_sorted
 
 from .. import APP_NAME, PROJECT_NAME, APP_BASE
 
@@ -209,19 +210,20 @@ def branch(request):
 
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
 
-    branches_names = get_branch_view(r.repo_path)
-     
-    #comit_record = get_commit_record(r.repo_path,branches_names)
+    branches_names = get_branch_view(r.repo_path)    
+    #comit_record = get_commit_record(r.repo_path,branches_names)    
+    comit_record = get_comit_record(r.repo_path,branches_names) 
     
-    comit_record = get_comit_record(r.repo_path,branches_names)
+    branch_commits = del_common_cmt(r.repo_path,branches_names,comit_record)
     
-    diagram_record = get_rec(r.repo_path,branches_names,comit_record)
+    sorted_record = get_sorted(branch_commits)
 
     return {'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
             'repository_name': r.repo_name,
             'branches_names': branches_names,
-            'diagram_record':diagram_record,
+            'sorted_record':sorted_record,
+            'branch_commits':branch_commits,
             'comit_record': comit_record
             }
 

@@ -51,7 +51,7 @@ branch_map = {}
       <th>Branch</th>
 </tr>
 
-%for CR in diagram_record:
+%for CR in sorted_record:
 <!--
 {'message': "Merge branch 'FB' of ssh://server.tdea/data/git-repositories/eims-dev   ,
 'datetime': datetime.datetime(2013, 1, 17, 18, 10, 51), 'branches': 'FB',
@@ -72,14 +72,14 @@ branch_map = {}
   <td>&nbsp;&nbsp;&nbsp;${CR['message']}</td>
   <td>&nbsp;&nbsp;&nbsp;${CR['datetime']}&nbsp;&nbsp;</td>
   <td>&nbsp;&nbsp;&nbsp;${CR['branches']}&nbsp;&nbsp;</td>
+  <td>&nbsp;&nbsp;&nbsp;${CR['is_first']}&nbsp;&nbsp;</td>
+  <td>&nbsp;&nbsp;&nbsp;${CR['is_last']}&nbsp;&nbsp;</td>
  
   %for bname in get_branch_order(branch_map): 
     <td style = "width:5px; background-color: ${branch_map[bname]['color']}" >
     
-    %if bname == CR['branches']:
-     
-        <div class="circle"></div>
-        
+    %if bname == CR['branches']:     
+        <div class="circle"></div>        
     %endif
       <%
       if CR['branches'] == bname:

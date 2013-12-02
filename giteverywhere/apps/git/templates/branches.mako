@@ -30,7 +30,7 @@ The git app
       <th>Commit Message</th>
 
     </tr>
-    %for commit in diagram_record:
+    %for commit in sorted_record:
      
     <tr class="${loop.cycle('oddrow', 'evenrow')}">
       <td>${commit['branches']}</td>

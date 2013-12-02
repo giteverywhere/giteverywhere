@@ -265,58 +265,62 @@ def get_comit_record(repo_path,branches_names):
         s = subprocess.check_output("cd %s; git checkout %s; git log  " % (repo_path,b), shell=True)
         r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
         matches = r.findall(s)
-        for m in matches[::-1]:
-	
+        for m in matches[::-1]:	
 	        
 	  l = m[2][3:len(m[2])-6]    #  m[2] contains date and time of commit log
 	    
 	  time = datetime.datetime.strptime(l, '%a %b %d %H:%M:%S %Y')  #  parses datetime string ('l' here) according to format
 	  log[branches_names.index(b)].append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=time, message=m[3].strip(),is_first = '', is_last = '', branches = b.strip()))
 	    
-
     return log
             
-def get_rec(repo_path,branches_names,comit_record):
+def del_common_cmt(repo_path,branches_names,comit_record):
      
     log = comit_record
     branches = branches_names
-    cm = log
+    cm = log 
+    for b in log:
+        count = 0
+        for c in b:
+            branch = []
+            s = subprocess.check_output("cd %s; git branch --contains %s" % (repo_path,c['commit_hash']), shell=True)
+            r = re.compile("(.*)\n")
+            matches = r.findall(s)
+            for m in matches:
+                if m.startswith('*'): 
+                    m = m[2:]            
+                branch.append(m.strip()) 
+            for CB in branch:
+	        if c['branches']!= CB :
+                    for t in range(len(cm[branches.index(CB)])):
+		      if count == 0:
+	                if c['commit_hash']== cm[branches.index(CB)][t]['commit_hash']:
+                            del cm[branches.index(CB)][t]
+                            t =len(cm[branches.index(CB)])
+	                else:
+			  break
+
+    return cm
+    
+def get_sorted(branch_commits):               
+    
     cmt = []
-     
-    for b in range(len(branches)):
-      for c in range(len(log[b])):
-        branch = []
-        s = subprocess.check_output("cd %s; git branch --contains %s" % (repo_path,log[b][c]['commit_hash']), shell=True)
-        r = re.compile("((.*))\n")
-        matches = r.findall(s)
-        for m in matches:
-          w = m[0]
-          if w.startswith('*'): 
-            w = w[2:]            
-          branch.append(w.strip()) 
-        for m in branch:                     
-          if log[b][c]['branches']!= m :
-              for t in range(branches.index(m)):	      
-	        if log[b][c]['commit_hash']== cm[branches.index(m)][t]['commit_hash']:
-                   del cm[branches.index(m)][t]
-                   t = len(cm[branches.index(m)])
-                else:
-	          break
-                  
-                  
-    for FL in range(len(cm)):
-      for dic in range(len(cm[FL])):
-          if cm[FL][dic] == cm[FL][0]:                 # conditional statements to identify first and last commit of each branch
-            cm[FL][dic]['is_first'] = 'TRUE'
-            cm[FL][dic]['is_last'] = 'FALSE' 
-          elif cm[FL][dic] == cm[FL][-1]:
-	    cm[FL][dic]['is_first'] = 'FALSE'
-            cm[FL][dic]['is_last'] = 'TRUE'
-          else:
-	    cm[FL][dic]['is_first'] = 'FALSE'
-            cm[FL][dic]['is_last'] = 'FALSE'
-          cmt.append(cm[FL][dic])
-      cmt = sorted(cmt, key=operator.itemgetter('datetime'), reverse = True)
+    cm = branch_commits
+    
+    for FL in cm:
+        for dic in range(len(FL)):
+            if FL[dic] == FL[0]:                 # conditional statements to identify first and last commit of each branch
+                FL[dic]['is_first'] = 'TRUE'
+                FL[dic]['is_last'] = 'FALSE' 
+            elif FL[dic] == FL[-1]:
+	        FL[dic]['is_first'] = 'FALSE'
+                FL[dic]['is_last'] = 'TRUE'
+            else:
+	        FL[dic]['is_first'] = 'FALSE'
+                FL[dic]['is_last'] = 'FALSE'
+            cmt.append(FL[dic])
+        cmt = sorted(cmt, key=operator.itemgetter('datetime'), reverse = True)
+    
     return cmt
    
 def get_commit_record(repo_path,branches_names):
