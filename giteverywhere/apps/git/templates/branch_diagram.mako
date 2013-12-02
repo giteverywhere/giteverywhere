@@ -72,8 +72,6 @@ branch_map = {}
   <td>&nbsp;&nbsp;&nbsp;${CR['message']}</td>
   <td>&nbsp;&nbsp;&nbsp;${CR['datetime']}&nbsp;&nbsp;</td>
   <td>&nbsp;&nbsp;&nbsp;${CR['branches']}&nbsp;&nbsp;</td>
-  <td>&nbsp;&nbsp;&nbsp;${CR['is_first']}&nbsp;&nbsp;</td>
-  <td>&nbsp;&nbsp;&nbsp;${CR['is_last']}&nbsp;&nbsp;</td>
  
   %for bname in get_branch_order(branch_map): 
     <td style = "width:5px; background-color: ${branch_map[bname]['color']}" >
