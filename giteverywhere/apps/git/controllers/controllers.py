@@ -27,6 +27,9 @@ from ..lib.repository import get_commit_record
 from ..lib.repository import get_comit_record
 from ..lib.repository import del_common_cmt
 from ..lib.repository import get_sorted
+from ..lib.repository import get_zip
+from ..lib.repository import get_tar
+from ..lib.repository import get_tar_gz
 
 from .. import APP_NAME, PROJECT_NAME, APP_BASE
 
@@ -246,13 +249,54 @@ def manage_branch(request):
             'branch_view': branch_view,
             'comit_log':comit_log           
      }
-            
 
-              
+    
+@view_config(route_name=APP_NAME+'.zip',renderer='%s:templates/archive.mako' % APP_BASE)
+def archive(request):
+  
+
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    branches = get_branch_view(r.repo_path)
+    
+    zipped = get_zip(r.repo_path,r.repo_name,branches)
+    
+    return{'APP_BASE': APP_BASE,
+            'repo_path': r.repo_path,
+            'repository_name':r.repo_name,
+            'zipped':zipped
+            
+          }
+@view_config(route_name=APP_NAME+'.tar',renderer='%s:templates/archive.mako' % APP_BASE)
+def tar(request):
+  
+
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    branches = get_branch_view(r.repo_path)
+
+    tar = get_tar(r.repo_path,r.repo_name,branches)
+    
+    return{'APP_BASE': APP_BASE,
+            'repo_path': r.repo_path,
+            'repository_name':r.repo_name,
+            'tar':tar           
+          }     
+@view_config(route_name=APP_NAME+'.tar_gz',renderer='%s:templates/archive.mako' % APP_BASE)
+def tar_gz(request):
+  
+
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    branches = get_branch_view(r.repo_path)
+
+    tar_gz = get_tar_gz(r.repo_path,r.repo_name,branches)
+    
+    return{'APP_BASE': APP_BASE,
+            'repo_path': r.repo_path,
+            'repository_name':r.repo_name,
+            'tar_gz':tar_gz             
+          }
         
             
 
-            
-
+       
 
 

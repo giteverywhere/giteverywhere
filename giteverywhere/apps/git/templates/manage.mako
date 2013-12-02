@@ -19,9 +19,14 @@ The git app
      <a href="${request.route_url('git.files', repo=repo)}">List</a>&nbsp;&nbsp;&nbsp;&nbsp;
      
      <a href="${request.route_url('git.branches', repo=repo)}">Branch_Diagram</a>&nbsp;&nbsp;&nbsp;&nbsp;
-     
-     
-       
+    
+     <a href="${request.route_url('git.zip', repo=repo)}">Create zip</a>&nbsp;&nbsp;&nbsp;&nbsp;
+  
+     <a href="${request.route_url('git.tar', repo=repo)}">Create tar</a>&nbsp;&nbsp;&nbsp;&nbsp;
+   
+     <a href="${request.route_url('git.tar_gz', repo=repo)}">Create tar.gz</a>
+
+            
 
   <table>
     <tr class="tr_heading">

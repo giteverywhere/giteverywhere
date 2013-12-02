@@ -280,7 +280,6 @@ def del_common_cmt(repo_path,branches_names,comit_record):
     branches = branches_names
     cm = log 
     for b in log:
-        count = 0
         for c in b:
             branch = []
             s = subprocess.check_output("cd %s; git branch --contains %s" % (repo_path,c['commit_hash']), shell=True)
@@ -292,14 +291,14 @@ def del_common_cmt(repo_path,branches_names,comit_record):
                 branch.append(m.strip()) 
             for CB in branch:
 	        if c['branches']!= CB :
-                    for t in range(len(cm[branches.index(CB)])):
-		      if count == 0:
-	                if c['commit_hash']== cm[branches.index(CB)][t]['commit_hash']:
-                            del cm[branches.index(CB)][t]
-                            t =len(cm[branches.index(CB)])
-	                else:
-			  break
-
+                        for t in range(len(cm[branches.index(CB)])):
+	                    if c['commit_hash']== cm[branches.index(CB)][t]['commit_hash']:
+                                    del cm[branches.index(CB)][t]
+                                    t = len(cm[branches.index(CB)])
+                            else:
+			        break
+           
+           
     return cm
     
 def get_sorted(branch_commits):               
@@ -363,3 +362,32 @@ def get_commit_record(repo_path,branches_names):
           
     return commit_record
      
+def get_zip(repo_path,repo_name,branches):
+    
+     # Given path to a repository on local system, returns a list of branches
+    repo = repo_name + '.zip'
+    path = os.path.join('/home/bint-e-shafiq/giteverywhere/giteverywhere/apps/git/static/',repo)
+    for b in branches:
+        s = subprocess.check_output("cd %s;git archive --format=zip %s > %s " % (repo_path,b,path), shell=True)
+        
+    return repo
+    
+def get_tar(repo_path,repo_name,branches):
+    
+     # Given path to a repository on local system, returns a list of branches
+    repo = repo_name + '.tar'
+    path = os.path.join('/home/bint-e-shafiq/giteverywhere/giteverywhere/apps/git/static/',repo)
+    for b in branches:
+        s = subprocess.check_output("cd %s;git archive --format=tar %s > %s " % (repo_path,b,path), shell=True)
+        
+    return repo
+    
+def get_tar_gz(repo_path,repo_name,branches):
+    
+     # Given path to a repository on local system, returns a list of branches
+    repo = repo_name + '.tar.bz'
+    path = os.path.join('/home/bint-e-shafiq/giteverywhere/giteverywhere/apps/git/static/',repo)
+    for b in branches:
+        s = subprocess.check_output("cd %s;git archive --format=tar.gz %s > %s " % (repo_path,b,path), shell=True)
+        
+    return repo

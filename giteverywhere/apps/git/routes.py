@@ -16,6 +16,9 @@ def application_routes(config):
     config.add_route(APP_NAME + '.diff', '/diff/{repo}')
     config.add_route(APP_NAME + '.cdiff', '/cdiff/{repo}/{hash}')
     config.add_route(APP_NAME + '.files', '/files/{repo}')
+    config.add_route(APP_NAME + '.zip', '/zip/{repo}')
+    config.add_route(APP_NAME + '.tar', '/tar/{repo}')
+    config.add_route(APP_NAME + '.tar_gz', '/tar_gz/{repo}')
     config.add_route(APP_NAME + '.contents', '/contents/{repo}/{f_name:.*}')
  
     config.add_static_view('static', 'static', cache_max_age=3600)
