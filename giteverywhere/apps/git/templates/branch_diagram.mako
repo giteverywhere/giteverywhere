@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <body>
+  
 <%inherit file="/base.mako"/>
 
 <%def name="title()">
@@ -37,6 +38,13 @@ branch_map = {}
     height: 5px;
     border-radius: 50%;
     background-color: blue
+}
+
+.line{
+    width: 5px;
+    height: 2px;
+    background-color: black
+
 }
 
 
@@ -77,22 +85,30 @@ branch_map = {}
     <td style = "width:5px; background-color: ${branch_map[bname]['color']}" >
     
     %if bname == CR['branches']:     
-        <div class="circle"></div>        
+        <div class="circle"></div> 
     %endif
       <%
       if CR['branches'] == bname:
+        
         if CR['is_first'] == 'TRUE': 
           branch_map[bname]['color'] = 'white'
         endif
       endif
    %> 
-    <td>&nbsp;</td>  
-  %endfor          
-   
+    <td>&nbsp;
+      %if bname == CR['branches']:
+       %if CR['message'].startswith ('Merge'):
+               <div class="line"></div>
+          %endif
+     %endif
+  %endfor
 %endfor
+
+</td>  
 </tr> 
 </table>
 </div>
 </body>
+
 </html>
     

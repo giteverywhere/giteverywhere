@@ -265,6 +265,7 @@ def get_comit_record(repo_path,branches_names):
         s = subprocess.check_output("cd %s; git checkout %s; git log  " % (repo_path,b), shell=True)
         r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
         matches = r.findall(s)
+        
         for m in matches[::-1]:	
 	        
 	  l = m[2][3:len(m[2])-6]    #  m[2] contains date and time of commit log
@@ -279,25 +280,35 @@ def del_common_cmt(repo_path,branches_names,comit_record):
     log = comit_record
     branches = branches_names
     cm = log 
+    #try:
     for b in log:
-        for c in b:
-            branch = []
-            s = subprocess.check_output("cd %s; git branch --contains %s" % (repo_path,c['commit_hash']), shell=True)
-            r = re.compile("(.*)\n")
-            matches = r.findall(s)
-            for m in matches:
-                if m.startswith('*'): 
-                    m = m[2:]            
-                branch.append(m.strip()) 
-            for CB in branch:
-	        if c['branches']!= CB :
+            for c in b:
+                branch = []
+                s = subprocess.check_output("cd %s; git branch --contains %s" % (repo_path,c['commit_hash']), shell=True)
+                r = re.compile("(.*)\n")
+                matches = r.findall(s)
+            
+                for m in matches:
+                    if m.startswith('*'): 
+                        m = m[2:]            
+                    branch.append(m.strip()) 
+                
+                for CB in branch:
+	            if c['branches']!= CB :
                         for t in range(len(cm[branches.index(CB)])):
 	                    if c['commit_hash']== cm[branches.index(CB)][t]['commit_hash']:
-                                    del cm[branches.index(CB)][t]
-                                    t = len(cm[branches.index(CB)])
-                            else:
-			        break
-           
+                                 del cm[branches.index(CB)][t]
+                                 #t = len(cm[branches.index(CB)])
+                                 break
+                            #else:
+			     #   break
+		    #else:
+		     #    pass
+		        
+		       
+    #except (IndexError):
+        #pass
+                           
            
     return cm
     
