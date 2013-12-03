@@ -6,6 +6,7 @@ import subprocess
 import os
 import operator
 import datetime
+import zipfile
 
 
 def get_commit_log(repo_path,b_name = None):
@@ -240,7 +241,7 @@ def get_subdir(repo_path,f_name):
     contents = []
     s = subprocess.check_output("cd %s; more %s" % (repo_path,f_name), shell=True)
     
-    r = re.compile("((.*))\n")
+    r = re.compile("((.*))")
   
     
     matches = r.findall(s)
@@ -373,15 +374,38 @@ def get_commit_record(repo_path,branches_names):
           
     return commit_record
      
-def get_zip(repo_path,repo_name,branches):
+#def get_zip(repo_path,repo_name,branches):
     
      # Given path to a repository on local system, returns a list of branches
-    repo = repo_name + '.zip'
-    path = os.path.join('/home/bint-e-shafiq/giteverywhere/giteverywhere/apps/git/static/',repo)
-    for b in branches:
-        s = subprocess.check_output("cd %s;git archive --format=zip %s > %s " % (repo_path,b,path), shell=True)
-        
-    return repo
+def get_zip(folder_name, repo_path):            
+    ''' 
+    zip = zipfile.ZipFile('testing'+ '.zip', 'w', zipfile.ZIP_DEFLATED)
+    rootlen = len(repo_name) + 1
+    for base, dirs, files in os.walk(repo_name):
+        for file in files:
+            fn = os.path.join(base, file)
+            zip.write(fn, fn[rootlen:])
+    
+    '''
+    relroot = os.path.abspath(os.path.join(repo_path, ".."))
+    with zipfile.ZipFile(folder_name, "w", zipfile.ZIP_DEFLATED) as zip:
+        for root, dirs, files in os.walk(repo_path):
+            # add directory (needed for empty dirs)
+            zip.write(root, os.path.relpath(root, relroot))
+            for file in files:
+                filename = os.path.join(root, file)
+                if os.path.isfile(filename): # regular files only
+                    arcname = os.path.join(os.path.relpath(root, relroot), file)
+                    zip.write(filename, arcname)
+
+   # get_zip('repo.zip', 'test_repo') #insert your variables here
+#    repo = repo_name + '.zip'
+ #   path = os.path.join('/home/bint-e-shafiq/giteverywhere/giteverywhere/apps/git/static/',repo)
+  #  for b in branches:
+   #     s = subprocess.check_output("cd %s;git archive --format=zip %s > %s " % (repo_path,b,path), shell=True)
+    #except RuntimeError:
+     #   pass
+    return root
     
 def get_tar(repo_path,repo_name,branches):
     

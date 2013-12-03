@@ -95,12 +95,8 @@ branch_map = {}
         endif
       endif
    %> 
-    <td>&nbsp;
-      %if bname == CR['branches']:
-       %if CR['message'].startswith ('Merge'):
-               <div class="line"></div>
-          %endif
-     %endif
+     <td>&nbsp;</td>
+    
   %endfor
 %endfor
 

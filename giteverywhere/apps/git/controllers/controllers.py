@@ -1,6 +1,8 @@
 from pyramid.view import view_config
 import os
 import re
+import zipfile
+import sys
 
 from ..models import (
     DBSession,
@@ -187,19 +189,20 @@ def file_content(request):
     #Note: View contents of file
 
     f_name = request.matchdict['f_name'] 
-    repo_path = os.path.join('/home/bint-e-shafiq',request.matchdict['repo'])
-    s = os.path.isdir(os.path.join(repo_path, f_name))
+    #repo_path = os.path.join('/home/bint-e-shafiq',request.matchdict['repo'])
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    s = os.path.isdir(os.path.join(r.repo_path, f_name))
     directory = {}
     file_contents = {}
     if s == True:
-        file_contents = get_file_contents(repo_path,f_name)
+        file_contents = get_file_contents(r.repo_path,f_name)
     else:
-        directory = get_subdir(repo_path,f_name) 
+        directory = get_subdir(r.repo_path,f_name) 
         
     repo =os.path.join(request.matchdict['repo'],f_name)
     
     return {'APP_BASE': APP_BASE,
-            'repo_path': repo_path,
+            'repo_path': r.repo_path,
             'repo':repo,
             'f_name':f_name,
             'directory':directory,
@@ -257,9 +260,9 @@ def archive(request):
 
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
     branches = get_branch_view(r.repo_path)
-    
-    zipped = get_zip(r.repo_path,r.repo_name,branches)
-    
+    folder_name = r.repo_name + '.zip'
+    #zipped = get_zip(r.repo_path,r.repo_name,branches)
+    zipped = get_zip(folder_name,r.repo_path)  #directory at given path is zipped and zipped folder saved at /home/bint-e-shafiq/giteverywhere
     return{'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
             'repository_name':r.repo_name,
