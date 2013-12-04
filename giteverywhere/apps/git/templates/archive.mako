@@ -8,7 +8,7 @@ The git app
 <div>
 
  
-${zipped}
+${tar}
 </div>
 
 

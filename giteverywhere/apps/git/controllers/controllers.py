@@ -259,11 +259,11 @@ def archive(request):
   
 
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
-    branches = get_branch_view(r.repo_path)
-    folder_name = r.repo_name + '.zip'
+    
+    zip_name = r.repo_name + '.zip'
     #zipped = get_zip(r.repo_path,r.repo_name,branches)
-    zipped = get_zip(folder_name,r.repo_path)  #directory at given path is zipped and zipped folder saved at /home/bint-e-shafiq/giteverywhere
-    return{'APP_BASE': APP_BASE,
+    zipped = get_zip(zip_name,r.repo_path)  #directory at given path is zipped  and saved at /home/bint-e-shafiq/giteverywhere
+    return{
             'repo_path': r.repo_path,
             'repository_name':r.repo_name,
             'zipped':zipped
@@ -272,11 +272,10 @@ def archive(request):
 @view_config(route_name=APP_NAME+'.tar',renderer='%s:templates/archive.mako' % APP_BASE)
 def tar(request):
   
-
+    
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
-    branches = get_branch_view(r.repo_path)
-
-    tar = get_tar(r.repo_path,r.repo_name,branches)
+    tar_name = r.repo_name + '.tar.gz'
+    tar = get_tar(r.repo_path,)
     
     return{'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
