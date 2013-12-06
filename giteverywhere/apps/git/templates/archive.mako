@@ -7,7 +7,6 @@ The git app
 
 <div>
 
-Zipped Folder downloaded successfully!
 
 </div>
 

@@ -19,7 +19,6 @@ def application_routes(config):
     config.add_route(APP_NAME + '.manage', '/manage/{repo}')
     config.add_route(APP_NAME + '.zip', '/zip/{repo}')
     config.add_route(APP_NAME + '.tar', '/tar/{repo}')
-    config.add_route(APP_NAME + '.tar_gz', '/tar_gz/{repo}')
     config.add_static_view('static', 'git:static/')
     config.add_static_view('statics', 'static', cache_max_age=3600)
     

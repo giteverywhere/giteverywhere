@@ -397,3 +397,21 @@ def get_zip(zip_name, repo_path):
 
     return filename
     
+def get_tar_gz(repo_path, repo_name):
+   
+    folder_name = os.path.join(r'/home/bint-e-shafiq/giteverywhere/giteverywhere/apps/git/static', repo_name)
+    relroot = os.path.abspath(os.path.join(repo_path,"..")) 
+    
+    tar = tarfile.open( folder_name + ".tgz", "w:gz" )
+    
+    for root,dirs,files in os.walk(repo_path):
+	  tar.add(root, os.path.relpath(root, relroot))
+	  
+	  for file in files:
+	    filename = os.path.join(root,file)
+	    if os.path.isfile(filename):
+	      arcname = os.path.join(os.path.relpath(root, relroot), file)
+	      tar.add(filename,arcname)
+
+    tar.close()
+    return tar
