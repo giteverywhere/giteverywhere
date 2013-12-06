@@ -1,5 +1,4 @@
 <%inherit file="/base.mako"/>
-
 <%def name="title()">
 The git app
 </%def>
@@ -9,18 +8,18 @@ The git app
 
   <table>
     <tr class="tr_heading">
-      <th>Branch name</th>
-     
+      <th>Branch name</th>    
+    </tr> 
+
+    %for branch in branches:
+    <tr class="${loop.cycle('oddrow', 'evenrow')}">
+        <td>${branch}</td>
     </tr>
- 
-   %for branch in branches:
-   <tr class="${loop.cycle('oddrow', 'evenrow')}">
-   <td>${branch}</td>
-      </tr>
       %endfor  
+
   </table>
-  
 </div>
+
 
 
 

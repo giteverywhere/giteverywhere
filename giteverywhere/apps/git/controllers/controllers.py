@@ -3,6 +3,8 @@ import os
 import re
 import zipfile
 import sys
+import json
+from pyramid.httpexceptions import HTTPFound
 
 from ..models import (
     DBSession,
@@ -14,8 +16,7 @@ from ..models import (
 from ..lib.repository import get_commit_log
 from ..lib.repository import get_branch_view
 from ..lib.repository import get_current_branch
-from ..lib.repository import get_comit_log
-from ..lib.repository import get_log
+from ..lib.repository import get_clog
 from ..lib.repository import get_tag_list
 from ..lib.repository import get_tag_detail
 from ..lib.repository import get_neg_detail
@@ -28,10 +29,11 @@ from ..lib.repository import get_subdir
 from ..lib.repository import get_commit_record
 from ..lib.repository import get_comit_record
 from ..lib.repository import del_common_cmt
+from ..lib.repository import get_comit_log
 from ..lib.repository import get_sorted
 from ..lib.repository import get_zip
-from ..lib.repository import get_tar
-from ..lib.repository import get_tar_gz
+#from ..lib.repository import get_tar
+#from ..lib.repository import get_tar_gz
 
 from .. import APP_NAME, PROJECT_NAME, APP_BASE
 
@@ -45,18 +47,6 @@ def view_rnames(request):
   
   view = DBSession.query(Repository).all()
   return {'view':view}
-    
-@view_config(route_name=APP_NAME+'.clog', renderer='%s:templates/clog.mako' %APP_BASE)
-def log(request):
-    #Note: view the log of active branch of repository
- 
-    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
-    
-    log = get_log(r.repo_path)
-    return {'APP_BASE': APP_BASE,   
-            'repo_path': r.repo_path,
-            'repo': r.repo_name,
-            'comit_log': log}
   
 
 @view_config(route_name=APP_NAME+'.log', renderer='%s:templates/log.mako' % APP_BASE)
@@ -71,36 +61,70 @@ def log_view(request):
             'repo_path': r.repo_path,
             'repository_name': r.repo_name,
             'b_name' : b_name,
-            'commit_log': commit_log}            
+            'commit_log': commit_log}  
+    
+@view_config(route_name=APP_NAME+'.clog', renderer='%s:templates/clog.mako' %APP_BASE)
+def log(request):
+    #Note: view the log of active branch of repository
+ 
+    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
+    output = request.matchdict['output']
+    log = get_clog(r.repo_path)
+    data = json.dumps(log)
+    
+    return {'APP_BASE': APP_BASE,   
+            'repo_path': r.repo_path,
+            'repo': r.repo_name,
+            'comit_log': log,
+            'output':output,
+            'data':data
+            }        
             
 @view_config(route_name=APP_NAME+'.branch', renderer='%s:templates/branch.mako' % APP_BASE)
+#@view_config(route_name=APP_NAME+'.branch', renderer="json")
 def branch_log(request):
     #Note: View branches of repository
   
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
    
     branches = get_branch_view(r.repo_path)
-           
-    return {'APP_BASE': APP_BASE,
+    output = request.matchdict['output']
+    
+    lst = []
+    for b in branches:
+     # s = {}
+      #s['branch_name'] = b
+      #lst.append(b)
+      data = json.dumps(branches)
+    if output == 'html':
+        return{'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
             'repository_name': r.repo_name,
             'branches': branches
-          
             }
-           
-@view_config(route_name=APP_NAME+'.cbranch', renderer='%s:templates/c_branch.mako' % APP_BASE)
+    else:
+         return data
+        
+
+@view_config(route_name=APP_NAME+'.cbranch', renderer="json")
 def current_branch(request):
     #Note: View active branche of repository
- 
+  
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
    
-    branch_view = get_current_branch(r.repo_path)
+    branch_view = get_current_branch(r.repo_path)  
+    output = request.matchdict['output']
     
-    return {'APP_BASE': APP_BASE,
-            'repository_path': r.repo_path,
-            'repository_name': r.repo_name,
-            'branch_view': branch_view}
-            
+    data = json.dumps(branch_view)
+    if output == 'html': 
+        return {'APP_BASE': APP_BASE,
+                'repository_path': r.repo_path,
+                'repository_name': r.repo_name,
+                'branch_view': branch_view
+                }
+    else:
+        return data
+
 @view_config(route_name=APP_NAME+'.tag', renderer='%s:templates/tag.mako' % APP_BASE)
 def tag_title(request):
     #Note: View tags of repository
@@ -259,16 +283,22 @@ def archive(request):
   
 
     r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
-    
+  
     zip_name = r.repo_name + '.zip'
     #zipped = get_zip(r.repo_path,r.repo_name,branches)
     zipped = get_zip(zip_name,r.repo_path)  #directory at given path is zipped  and saved at /home/bint-e-shafiq/giteverywhere
-    return{
-            'repo_path': r.repo_path,
-            'repository_name':r.repo_name,
-            'zipped':zipped
+    path = os.path.join('git:static/',zip_name)
+    
+    return HTTPFound (location = request.static_url(path))
+ 
+    '''return{
+           'repo_path': r.repo_path,
+           'repository_name':r.repo_name,
+           'zipped':zipped
             
-          }
+     }
+    '''
+    
 @view_config(route_name=APP_NAME+'.tar',renderer='%s:templates/archive.mako' % APP_BASE)
 def tar(request):
   

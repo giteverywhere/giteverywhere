@@ -26,7 +26,7 @@ def get_commit_log(repo_path,b_name = None):
           
     return commits
 
-def get_log(repo_path):
+def get_clog(repo_path):
     """
     Given branch and path of a repository on local system, returns a list of commit messages along with
     commit hash 
@@ -50,21 +50,7 @@ def get_log(repo_path):
         commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=m[2].strip(), message=m[3].strip(), is_first = f_commit.strip(), is_last = l_commit.strip()))
           
     return commits
-      
-def get_comit_log(repo_path):
-    """
-    Given path to a repository on local system, returns most recent commit message along with
-    commit hash
-    """
-  
-    commits = []
-    s = subprocess.check_output("cd %s; git log -1 " % repo_path, shell=True)
-    r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
-    matches = r.findall(s)
-    for m in matches:
-        commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=m[2].strip(), message=m[3].strip()))
-
-    return commits
+     
 
 def get_branch_view(repo_path):
   
@@ -374,6 +360,21 @@ def get_commit_record(repo_path,branches_names):
     
           
     return commit_record
+    
+def get_comit_log(repo_path):
+    """
+    Given path to a repository on local system, returns most recent commit message along with
+    commit hash
+    """
+  
+    commits = []
+    s = subprocess.check_output("cd %s; git log -1 " % repo_path, shell=True)
+    r = re.compile("commit (.*?)\n.*?Author: (.*?)\n.*?Date:(.*?)\n\n(.*?)\n", re.M+re.S+re.U+re.I)
+    matches = r.findall(s)
+    for m in matches:
+        commits.append(dict(commit_hash=m[0].strip(), author=m[1].strip(), datetime=m[2].strip(), message=m[3].strip()))
+
+    return commits
      
 #def get_zip(repo_path,repo_name,branches):
     
@@ -383,7 +384,8 @@ def get_zip(zip_name, repo_path):
     #folder_name = ('/home/bint-e-shafiq/giteverywhere/giteverywhere/apps/git',repo_name)
     folder_name = os.path.join(r'/home/bint-e-shafiq/giteverywhere/giteverywhere/apps/git/static', zip_name)
     relroot = os.path.abspath(os.path.join(repo_path, ".."))
-    with zipfile.ZipFile(folder_name, "w", zipfile.ZIP_DEFLATED) as zip:
+    with zipfile.ZipFile(folder_name, "w")as zip:
+       # with zipfile.ZipFile(folder_name, "w", zipfile.ZIP_DEFLATED) as zip:
         for root, dirs, files in os.walk(repo_path):
             # add directory (needed for empty dirs)
             zip.write(root, os.path.relpath(root, relroot))

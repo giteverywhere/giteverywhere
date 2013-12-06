@@ -7,9 +7,10 @@ The git app
 
 <div>
 
- 
-${tar}
+Zipped Folder downloaded successfully!
+
 </div>
+
 
 
 
