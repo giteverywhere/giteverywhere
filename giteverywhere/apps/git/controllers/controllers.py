@@ -34,19 +34,33 @@ from ..lib.repository import get_sorted
 from ..lib.repository import get_zip
 from ..lib.repository import get_tar_gz
 
+#Note: Instead of so many import lines this would have been better
+#import ..lib.repository
+#OR
+#from ..lib.repository import *
+
 from .. import APP_NAME, PROJECT_NAME, APP_BASE
 
 
 @view_config(route_name=APP_NAME+'.home', renderer='%s:templates/list.mako' % APP_BASE)
 def my_view(request):
     return {'APP_BASE': APP_BASE}
-    
+
+
 @view_config(route_name=APP_NAME+'.view_repo_names', renderer='%s:templates/view_repo_names.mako'%APP_BASE)
 def view_rnames(request):
-  
-  view = DBSession.query(Repository).all()
-  return {'view':view}
-  
+
+    only_content = request.GET.get('only_content', 0)
+    view = DBSession.query(Repository).all()
+    return {'view': view, 'only_content': only_content}
+
+
+@view_config(route_name=APP_NAME+'.json_repo_names', renderer='json')
+def json_rnames(request):
+
+    repositories = DBSession.query(Repository).all()
+    return repositories
+
 
 @view_config(route_name=APP_NAME+'.log', renderer='%s:templates/log.mako' % APP_BASE)
 def log_view(request):
@@ -78,32 +92,32 @@ def log(request):
             'output':output,
             'data':data
             }        
-            
+
+
+def get_branches(repo_name):
+    r = DBSession.query(Repository).filter_by(repo_name=repo_name).first()
+    branches = get_branch_view(r.repo_path)
+    return branches
+
+
 @view_config(route_name=APP_NAME+'.branch', renderer='%s:templates/branch.mako' % APP_BASE)
-#@view_config(route_name=APP_NAME+'.branch', renderer="json")
 def branch_log(request):
     #Note: View branches of repository
-  
-    r = DBSession.query(Repository).filter_by(repo_name=request.matchdict['repo']).first()
-   
-    branches = get_branch_view(r.repo_path)
-    output = request.matchdict['output']
-    
-    lst = []
-    for b in branches:
-     # s = {}
-      #s['branch_name'] = b
-      #lst.append(b)
-      data = json.dumps(branches)
-    if output == 'html':
-        return{'APP_BASE': APP_BASE,
+    branches = get_branches(request.matchdict['repo'])
+    only_content = request.GET.get('only_content', 0)
+
+    return {'APP_BASE': APP_BASE,
             'repo_path': r.repo_path,
             'repository_name': r.repo_name,
-            'branches': branches
-            }
-    else:
-         return data
-        
+            'branches': branches,
+            'only_content': only_content}
+
+
+@view_config(route_name=APP_NAME+'.json_branch', renderer="json")
+def json_branch_log(request):
+    branches = get_branches(request.matchdict['repo'])
+    return branches
+
 
 @view_config(route_name=APP_NAME+'.cbranch', renderer="json")
 def current_branch(request):

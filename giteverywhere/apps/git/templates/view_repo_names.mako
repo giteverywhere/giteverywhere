@@ -1,9 +1,17 @@
- 
-<%inherit file="/base.mako"/>
+<%!
+
+def inherit(context):
+    if not context.get('only_content'):
+        return '/base.mako'
+    else:
+        return None
+%>
+<%inherit file="${inherit(context)}"/>
 
 <%def name="title()">
 The git app
 </%def>
+
 
 <div>
   <table>

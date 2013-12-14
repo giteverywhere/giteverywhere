@@ -53,23 +53,20 @@ def get_clog(repo_path):
      
 
 def get_branch_view(repo_path):
-  
-  # Given path to a repository on local system, returns a list of branches
-  
-  
+    # Given path to a repository on local system, returns a list of branches
     branches = []
 
     s = subprocess.check_output("cd %s; git branch " % repo_path, shell=True)
     r = re.compile("((.*))\n")
     matches = r.findall(s)
-    for m in matches: 
+    for m in matches:
         b = m[0]
-        if b.startswith('*'): 
-	   b = b[2:]             # return active branch name without *
+        if b.startswith('*'):
+		    b = b[2:]             # return active branch name without *
         branches.append(b.strip())
-        
+
     return branches
-   
+
 
 def get_current_branch(repository_path):
   

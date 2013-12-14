@@ -4,10 +4,12 @@ from . import APP_NAME, PROJECT_NAME, APP_BASE
 def application_routes(config):
     config.add_route(APP_NAME + '.home', '/')
     config.add_route(APP_NAME + '.view_repo_names', '/view_repo_names')
+    config.add_route(APP_NAME + '.json_repo_names', '/json/view_repo_names')
     config.add_route(APP_NAME + '.log', '/log/{repo}/{b_name}')
     config.add_route(APP_NAME + '.clog', '/clog/{repo}/{output}') 
    # config.add_route(APP_NAME + '.alog', '/alog/{repo}')
-    config.add_route(APP_NAME + '.branch', '/branch/{repo}/{output}')
+    config.add_route(APP_NAME + '.branch', '/branch/{repo}')
+    config.add_route(APP_NAME + '.json_branch', '/json/branch/{repo}')
     config.add_route(APP_NAME + '.cbranch', '/cbranch/{repo}/{output}')   
     config.add_route(APP_NAME + '.tag', '/tag/{repo}')
     config.add_route(APP_NAME + '.showtag', '/showtag/{repo}')
